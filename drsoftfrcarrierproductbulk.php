@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use DrSoftFr\Module\CarrierProductBulk\Config;
+use DrSoftFr\Module\CarrierProductBulk\UI\Admin\Controller\CarrierProductBulkController;
 use PrestaShop\PrestaShop\Core\Cache\Clearer\CacheClearerChain;
 
 if (!defined('_PS_VERSION_') || !defined('_CAN_LOAD_FILES_')) {
@@ -47,7 +48,15 @@ class drsoftfrcarrierproductbulk extends Module
             'max' => _PS_VERSION_
         ];
         $this->tab = 'content_management';
-        $this->tabs = [];
+        $this->tabs = [
+            [
+                'class_name' => CarrierProductBulkController::TAB_CLASS_NAME,
+                'name' => 'Carrier Product Bulk',
+                'parent_class_name' => 'AdminParentShipping',
+                'route_name' => 'drsoft_fr_carrier_product_bulk_admin',
+                'visible' => true,
+            ],
+        ];
         $this->version = '1.0.0';
         $this->authorEmail = 'contact@drsoft.fr';
         $this->moduleGithubRepositoryUrl = 'https://github.com/drsoft-fr/drsoftfrcarrierproductbulk';
@@ -150,11 +159,13 @@ class drsoftfrcarrierproductbulk extends Module
     /**
      * Redirects the admin user to the ValidateCustomerPro controller in the admin panel.
      *
-     * @return string
+     * @return void
      */
-    public function getContent(): string
+    public function getContent(): void
     {
-        return 'Under development';
+        Tools::redirectAdmin(
+            $this->context->link->getAdminLink(CarrierProductBulkController::TAB_CLASS_NAME)
+        );
     }
 
     /**

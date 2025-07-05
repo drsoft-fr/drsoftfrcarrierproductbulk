@@ -1,0 +1,5 @@
+services:
+  DrSoftFr\Module\CarrierProductBulk\UI\Admin\Controller\CarrierProductBulkController:
+    public: true
+    tags:
+      - { name: 'controller.service_arguments' }
