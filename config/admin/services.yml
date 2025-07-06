@@ -33,3 +33,27 @@ services:
     arguments:
       - '@drsoft_fr.module.carrier_product_bulk.infrastructure.persistence.doctrine.product_carrier_repository'
     public: true
+
+  drsoft_fr.module.carrier_product_bulk.application.command_handler.add_carriers_to_products_handler:
+    class: DrSoftFr\Module\CarrierProductBulk\Application\CommandHandler\AddCarriersToProductsHandler
+    arguments:
+      - '@drsoft_fr.module.carrier_product_bulk.domain.service.carrier_product_service'
+    public: true
+
+  drsoft_fr.module.carrier_product_bulk.application.command_handler.remove_carriers_from_products_handler:
+    class: DrSoftFr\Module\CarrierProductBulk\Application\CommandHandler\RemoveCarriersFromProductsHandler
+    arguments:
+      - '@drsoft_fr.module.carrier_product_bulk.domain.service.carrier_product_service'
+    public: true
+
+  drsoft_fr.module.carrier_product_bulk.application.query_handler.get_carriers_handler:
+    class: DrSoftFr\Module\CarrierProductBulk\Application\QueryHandler\GetCarriersHandler
+    arguments:
+      - '@drsoft_fr.module.carrier_product_bulk.infrastructure.persistence.doctrine.carrier_repository'
+    public: true
+
+  drsoft_fr.module.carrier_product_bulk.application.query_handler.get_products_handler:
+    class: DrSoftFr\Module\CarrierProductBulk\Application\QueryHandler\GetProductsHandler
+    arguments:
+      - '@drsoft_fr.module.carrier_product_bulk.infrastructure.persistence.doctrine.product_repository'
+    public: true
