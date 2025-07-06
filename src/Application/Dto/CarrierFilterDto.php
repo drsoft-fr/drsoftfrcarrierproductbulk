@@ -14,12 +14,12 @@ final class CarrierFilterDto
 
     public function __construct(array $data)
     {
-        $this->idReference = isset($data['idReference']) ? (int)$data['idReference'] : null;
-        $this->name = $data['name'] ?? null;
-        $this->isFree = isset($data['isFree']) ? (bool)$data['isFree'] : null;
-        $this->deleted = isset($data['deleted']) ? (bool)$data['deleted'] : null;
-        $this->active = isset($data['active']) ? (bool)$data['active'] : null;
-        $this->limit = isset($data['limit']) ? (int)$data['limit'] : null;
-        $this->offset = isset($data['offset']) ? (int)$data['offset'] : null;
+        $this->idReference = isset($data['idReference']) && 0 < (int)$data['idReference'] ? (int)$data['idReference'] : null;
+        $this->name = false === empty($data['name']) ? strip_tags($data['name']) : null;
+        $this->isFree = isset($data['isFree']) && "" !== $data['isFree'] ? (bool)$data['isFree'] : null;
+        $this->deleted = isset($data['deleted']) && "" !== $data['deleted'] ? (bool)$data['deleted'] : null;
+        $this->active = isset($data['active']) && "" !== $data['active'] ? (bool)$data['active'] : null;
+        $this->limit = isset($data['limit']) && "" !== $data['limit'] ? (int)$data['limit'] : null;
+        $this->offset = isset($data['offset']) && "" !== $data['offset'] ? (int)$data['offset'] : null;
     }
 }
