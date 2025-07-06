@@ -3,6 +3,7 @@
 namespace DrSoftFr\Module\CarrierProductBulk\Infrastructure\Persistence\Doctrine;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryBuilder;
 use DrSoftFr\Module\CarrierProductBulk\Application\Dto\CarrierFilterDto;
 
 final class CarrierRepository
@@ -24,12 +25,37 @@ final class CarrierRepository
 
     public function findByFilter(CarrierFilterDto $filter): array
     {
+        $qb = $this->getQueryBuilder($filter);
+
+        $qb->select('*');
+
+        if ($filter->limit !== null) {
+            $qb->setMaxResults($filter->limit);
+        }
+
+        if ($filter->offset !== null) {
+            $qb->setFirstResult($filter->offset);
+        }
+
+        return $qb->execute()->fetchAllAssociative();
+    }
+
+    public function countByFilter(CarrierFilterDto $filter): int
+    {
+        $qb = $this->getQueryBuilder($filter);
+
+        $qb->select('COUNT(DISTINCT c.id_carrier)');
+
+        return (int)$qb->execute()->fetchOne();
+    }
+
+    private function getQueryBuilder(CarrierFilterDto $filter): QueryBuilder
+    {
         $qb = $this->connection->createQueryBuilder();
-        $qb->select('*')
-            ->from(
-                $this->tablePrefix . 'carrier',
-                'c'
-            )
+        $qb->from(
+            $this->tablePrefix . 'carrier',
+            'c'
+        )
             ->innerJoin(
                 'c',
                 $this->tablePrefix . 'carrier_shop',
@@ -59,6 +85,6 @@ final class CarrierRepository
             $qb->andWhere('c.active = :active')->setParameter('active', $filter->active);
         }
 
-        return $qb->execute()->fetchAllAssociative();
+        return $qb;
     }
 }

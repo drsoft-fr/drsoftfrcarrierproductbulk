@@ -46,6 +46,18 @@ services:
       - '@drsoft_fr.module.carrier_product_bulk.domain.service.carrier_product_service'
     public: true
 
+  drsoft_fr.module.carrier_product_bulk.application.query_handler.count_carriers_handler:
+    class: DrSoftFr\Module\CarrierProductBulk\Application\QueryHandler\CountCarriersHandler
+    arguments:
+      - '@drsoft_fr.module.carrier_product_bulk.infrastructure.persistence.doctrine.carrier_repository'
+    public: true
+
+  drsoft_fr.module.carrier_product_bulk.application.query_handler.count_products_handler:
+    class: DrSoftFr\Module\CarrierProductBulk\Application\QueryHandler\CountProductsHandler
+    arguments:
+      - '@drsoft_fr.module.carrier_product_bulk.infrastructure.persistence.doctrine.product_repository'
+    public: true
+
   drsoft_fr.module.carrier_product_bulk.application.query_handler.get_carriers_handler:
     class: DrSoftFr\Module\CarrierProductBulk\Application\QueryHandler\GetCarriersHandler
     arguments:

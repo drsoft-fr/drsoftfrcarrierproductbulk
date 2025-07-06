@@ -3,6 +3,7 @@
 namespace DrSoftFr\Module\CarrierProductBulk\Infrastructure\Persistence\Doctrine;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryBuilder;
 use DrSoftFr\Module\CarrierProductBulk\Application\Dto\ProductFilterDto;
 
 final class ProductRepository
@@ -27,7 +28,8 @@ final class ProductRepository
 
     public function findByFilter(ProductFilterDto $filter): array
     {
-        $qb = $this->connection->createQueryBuilder();
+        $qb = $this->getQueryBuilder($filter);
+
         $qb->select(
             'p.id_product',
             'pl.name',
@@ -39,11 +41,36 @@ final class ProductRepository
             'p.weight',
             'p.active',
             'p.visibility'
+        );
+
+        if ($filter->limit !== null) {
+            $qb->setMaxResults($filter->limit);
+        }
+
+        if ($filter->offset !== null) {
+            $qb->setFirstResult($filter->offset);
+        }
+
+        return $qb->execute()->fetchAllAssociative();
+    }
+
+
+    public function countByFilter(ProductFilterDto $filter): int
+    {
+        $qb = $this->getQueryBuilder($filter);
+
+        $qb->select('COUNT(DISTINCT p.id_product)');
+
+        return (int)$qb->execute()->fetchOne();
+    }
+
+    private function getQueryBuilder(ProductFilterDto $filter): QueryBuilder
+    {
+        $qb = $this->connection->createQueryBuilder();
+        $qb->from(
+            $this->tablePrefix . 'product',
+            'p'
         )
-            ->from(
-                $this->tablePrefix . 'product',
-                'p'
-            )
             ->innerJoin(
                 'p',
                 $this->tablePrefix . 'product_lang',
@@ -125,6 +152,6 @@ final class ProductRepository
                 ->setParameter('active', $filter->active);
         }
 
-        return $qb->execute()->fetchAllAssociative();
+        return $qb;
     }
 }

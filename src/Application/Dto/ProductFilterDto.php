@@ -15,6 +15,8 @@ final class ProductFilterDto
     public ?float $weightMin = null;
     public ?float $weightMax = null;
     public ?bool $active = null;
+    public ?int $limit = null;
+    public ?int $offset = null;
 
     public function __construct(array $data)
     {
@@ -29,5 +31,7 @@ final class ProductFilterDto
         $this->weightMin = isset($data['weightMin']) ? (float)$data['weightMin'] : null;
         $this->weightMax = isset($data['weightMax']) ? (float)$data['weightMax'] : null;
         $this->active = isset($data['active']) ? (bool)$data['active'] : null;
+        $this->limit = isset($data['limit']) ? (int)$data['limit'] : null;
+        $this->offset = isset($data['offset']) ? (int)$data['offset'] : null;
     }
 }
