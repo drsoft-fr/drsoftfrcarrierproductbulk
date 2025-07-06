@@ -7,3 +7,24 @@ admin_drsoft_fr_carrier_product_bulk_index:
     _legacy_link:
       - AdminDrSoftFrCarrierProductBulk
       - AdminDrSoftFrCarrierProductBulk:index
+
+admin_drsoft_fr_carrier_product_bulk_ajax:
+  path: /ajax
+  methods: [ POST ]
+  defaults:
+    _controller: DrSoftFr\Module\CarrierProductBulk\UI\Admin\Controller\CarrierProductBulkController::ajaxAction
+    _legacy_controller: AdminDrSoftFrCarrierProductBulk
+    _legacy_link:
+      - AdminDrSoftFrCarrierProductBulk:ajax
+
+admin_drsoft_fr_carrier_product_bulk_carrier_list:
+  path: /carrier/list
+  methods: [ GET ]
+  defaults:
+    _controller: DrSoftFr\Module\CarrierProductBulk\UI\Admin\Controller\CarrierProductBulkController::carrierListAction
+
+admin_drsoft_fr_carrier_product_bulk_product_list:
+  path: /product/list
+  methods: [ GET ]
+  defaults:
+    _controller: DrSoftFr\Module\CarrierProductBulk\UI\Admin\Controller\CarrierProductBulkController::productListAction

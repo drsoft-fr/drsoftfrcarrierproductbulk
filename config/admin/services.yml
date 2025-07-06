@@ -3,6 +3,14 @@ services:
     class: drsoftfrcarrierproductbulk
     public: true
 
+  DrSoftFr\Module\CarrierProductBulk\UI\Admin\Controller\CarrierProductBulkController:
+    arguments:
+      $addHandler: '@drsoft_fr.module.carrier_product_bulk.application.command_handler.add_carriers_to_products_handler'
+      $removeHandler: '@drsoft_fr.module.carrier_product_bulk.application.command_handler.remove_carriers_from_products_handler'
+      $getCarriersHandler: '@drsoft_fr.module.carrier_product_bulk.application.query_handler.get_carriers_handler'
+      $getProductsHandler: '@drsoft_fr.module.carrier_product_bulk.application.query_handler.get_products_handler'
+    tags: [ 'controller.service_arguments' ]
+
   drsoft_fr.module.carrier_product_bulk.infrastructure.persistence.doctrine.carrier_repository:
     class: DrSoftFr\Module\CarrierProductBulk\Infrastructure\Persistence\Doctrine\CarrierRepository
     arguments:

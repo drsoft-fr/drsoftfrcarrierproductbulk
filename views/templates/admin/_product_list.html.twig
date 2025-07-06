@@ -1,0 +1,36 @@
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <th><input type="checkbox" @change="toggleAll('products', $event)"></th>
+        <th>ID</th>
+        <th>Nom</th>
+        <th>Référence</th>
+        <th>Réf Fournisseur</th>
+        <th>Catégorie par défaut</th>
+        <th>Poids</th>
+        <th>Visible</th>
+        <th>Actif</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for product in products %}
+        <tr>
+            <td>
+                <input type="checkbox" class="bulk-item" :value="{{ product.id_product }}"
+                       :checked="selectedProducts.includes({{ product.id_product }})"
+                       @change="toggleItem('products', $event)">
+            </td>
+            <td>{{ product.id_product }}</td>
+            <td>{{ product.name }}</td>
+            <td>{{ product.reference }}</td>
+            <td>{{ product.supplier_reference }}</td>
+            <td>{{ product.id_category_default }}</td>
+            <td>{{ product.weight }}</td>
+            <td>{{ product.visibility }}</td>
+            <td>{{ product.active ? 'Oui' : 'Non' }}</td>
+        </tr>
+    {% else %}
+        <tr><td colspan="9" class="text-center">Aucun produit trouvé.</td></tr>
+    {% endfor %}
+    </tbody>
+</table>

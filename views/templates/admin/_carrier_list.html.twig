@@ -1,0 +1,30 @@
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <th><input type="checkbox" @change="toggleAll('carriers', $event)"></th>
+        <th>ID Réf</th>
+        <th>Nom</th>
+        <th>Livraison gratuite</th>
+        <th>Actif</th>
+        <th>Supprimé</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for carrier in carriers %}
+        <tr>
+            <td>
+                <input type="checkbox" class="bulk-item" :value="{{ carrier.id_reference }}"
+                       :checked="selectedCarriers.includes({{ carrier.id_reference }})"
+                       @change="toggleItem('carriers', $event)">
+            </td>
+            <td>{{ carrier.id_reference }}</td>
+            <td>{{ carrier.name }}</td>
+            <td>{{ carrier.is_free ? 'Oui' : 'Non' }}</td>
+            <td>{{ carrier.active ? 'Oui' : 'Non' }}</td>
+            <td>{{ carrier.deleted ? 'Oui' : 'Non' }}</td>
+        </tr>
+    {% else %}
+        <tr><td colspan="6" class="text-center">Aucun transporteur trouvé.</td></tr>
+    {% endfor %}
+    </tbody>
+</table>

@@ -1,0 +1,35 @@
+<form
+        id="carrier-filters"
+        hx-get="{{ path('admin_drsoft_fr_carrier_product_bulk_carrier_list') }}"
+        hx-target="#carriers-list"
+        hx-swap="innerHTML"
+        class="mb-3 p-3 border"
+>
+    <h4>Filtres Transporteurs</h4>
+    <div class="row">
+        <div class="col-md-3"><input type="number" name="idReference" class="form-control mb-2" placeholder="ID Référence"></div>
+        <div class="col-md-3"><input type="text" name="name" class="form-control mb-2" placeholder="Nom"></div>
+        <div class="col-md-2">
+            <select name="isFree" class="form-control mb-2">
+                <option value="">Livraison gratuite</option>
+                <option value="1">Oui</option>
+                <option value="0">Non</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <select name="active" class="form-control mb-2">
+                <option value="">Actif</option>
+                <option value="1">Oui</option>
+                <option value="0">Non</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <select name="deleted" class="form-control mb-2">
+                <option value="">Supprimé</option>
+                <option value="1">Oui</option>
+                <option value="0">Non</option>
+            </select>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Rechercher Transporteurs</button>
+</form>

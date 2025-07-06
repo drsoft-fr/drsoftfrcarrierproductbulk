@@ -1,0 +1,40 @@
+<form
+        id="product-filters"
+        hx-get="{{ path('admin_drsoft_fr_carrier_product_bulk_product_list') }}"
+        hx-target="#products-list"
+        hx-swap="innerHTML"
+        class="mb-3 p-3 border"
+>
+    <h4>Filtres Produits</h4>
+    <div class="row mb-2">
+        <div class="col-md-2"><input type="number" name="idProduct" class="form-control" placeholder="ID Produit"></div>
+        <div class="col-md-2"><input type="text" name="name" class="form-control" placeholder="Nom"></div>
+        <div class="col-md-2"><input type="text" name="reference" class="form-control" placeholder="Référence"></div>
+        <div class="col-md-2"><input type="text" name="supplierReference" class="form-control" placeholder="Réf Fournisseur"></div>
+        <div class="col-md-2"><input type="number" name="weightMin" step="0.01" class="form-control" placeholder="Poids Min"></div>
+        <div class="col-md-2"><input type="number" name="weightMax" step="0.01" class="form-control" placeholder="Poids Max"></div>
+    </div>
+    <!-- Catégories, Fournisseurs etc -->
+    <div class="row mb-2">
+        <div class="col-md-2"><input type="text" name="idCategoryDefault[]" class="form-control" placeholder="Catégorie par défaut"></div>
+        <div class="col-md-2"><input type="text" name="idCategory[]" class="form-control" placeholder="Catégorie liée"></div>
+        <div class="col-md-2"><input type="text" name="idSupplier[]" class="form-control" placeholder="Fournisseur"></div>
+        <div class="col-md-2"><input type="text" name="idManufacturer[]" class="form-control" placeholder="Fabricant"></div>
+        <div class="col-md-2"><input type="text" name="idShopDefault[]" class="form-control" placeholder="Shop par défaut"></div>
+        <div class="col-md-2">
+            <select name="visible" class="form-control">
+                <option value="">Visible</option>
+                <option value="1">Oui</option>
+                <option value="0">Non</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <select name="active" class="form-control">
+                <option value="">Actif</option>
+                <option value="1">Oui</option>
+                <option value="0">Non</option>
+            </select>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Rechercher Produits</button>
+</form>
