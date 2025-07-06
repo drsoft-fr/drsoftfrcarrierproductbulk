@@ -2,3 +2,28 @@ services:
   drsoft_fr.module.carrier_product_bulk.module:
     class: drsoftfrcarrierproductbulk
     public: true
+
+  drsoft_fr.module.carrier_product_bulk.infrastructure.persistence.doctrine.carrier_repository:
+    class: DrSoftFr\Module\CarrierProductBulk\Infrastructure\Persistence\Doctrine\CarrierRepository
+    arguments:
+      - '@doctrine.dbal.default_connection'
+      - '@=service("prestashop.adapter.legacy.context").getContext().shop.id'
+      - '%database_prefix%'
+    public: true
+
+  drsoft_fr.module.carrier_product_bulk.infrastructure.persistence.doctrine.product_carrier_repository:
+    class: DrSoftFr\Module\CarrierProductBulk\Infrastructure\Persistence\Doctrine\ProductCarrierRepository
+    arguments:
+      - '@doctrine.dbal.default_connection'
+      - '@=service("prestashop.adapter.legacy.context").getContext().shop.id'
+      - '%database_prefix%'
+    public: true
+
+  drsoft_fr.module.carrier_product_bulk.infrastructure.persistence.doctrine.product_repository:
+    class: DrSoftFr\Module\CarrierProductBulk\Infrastructure\Persistence\Doctrine\ProductRepository
+    arguments:
+      - '@doctrine.dbal.default_connection'
+      - '@=service("prestashop.adapter.legacy.context").getContext().language.id'
+      - '@=service("prestashop.adapter.legacy.context").getContext().shop.id'
+      - '%database_prefix%'
+    public: true
