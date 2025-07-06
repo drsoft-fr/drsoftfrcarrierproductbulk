@@ -27,3 +27,9 @@ services:
       - '@=service("prestashop.adapter.legacy.context").getContext().shop.id'
       - '%database_prefix%'
     public: true
+
+  drsoft_fr.module.carrier_product_bulk.domain.service.carrier_product_service:
+    class: DrSoftFr\Module\CarrierProductBulk\Domain\Service\CarrierProductService
+    arguments:
+      - '@drsoft_fr.module.carrier_product_bulk.infrastructure.persistence.doctrine.product_carrier_repository'
+    public: true
