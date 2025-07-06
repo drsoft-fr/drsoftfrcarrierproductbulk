@@ -1,0 +1,9 @@
+admin_drsoft_fr_carrier_product_bulk_index:
+  path: /
+  methods: [ GET ]
+  defaults:
+    _controller: DrSoftFr\Module\CarrierProductBulk\UI\Admin\Controller\CarrierProductBulkController::indexAction
+    _legacy_controller: AdminDrSoftFrCarrierProductBulk
+    _legacy_link:
+      - AdminDrSoftFrCarrierProductBulk
+      - AdminDrSoftFrCarrierProductBulk:index

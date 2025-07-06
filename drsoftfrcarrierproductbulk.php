@@ -53,7 +53,7 @@ class drsoftfrcarrierproductbulk extends Module
                 'class_name' => CarrierProductBulkController::TAB_CLASS_NAME,
                 'name' => 'Carrier Product Bulk',
                 'parent_class_name' => 'AdminParentShipping',
-                'route_name' => 'drsoft_fr_carrier_product_bulk_admin',
+                'route_name' => 'admin_drsoft_fr_carrier_product_bulk_index',
                 'visible' => true,
             ],
         ];

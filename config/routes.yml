@@ -1,0 +1,4 @@
+# Admin Back Office routing
+_admin_drsoft_fr_carrier_product_bulk_routing:
+  resource: "admin/routes.yml"
+  prefix: /drsoft-fr/carrier-product-bulk

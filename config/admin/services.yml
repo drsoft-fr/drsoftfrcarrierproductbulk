@@ -1,0 +1,4 @@
+services:
+  drsoft_fr.module.carrier_product_bulk.module:
+    class: drsoftfrcarrierproductbulk
+    public: true
