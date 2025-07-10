@@ -1,44 +1,37 @@
-{% extends '@Modules/drsoftfrcarrierproductbulk/views/templates/admin/base.html.twig' %}
+{% extends '@Modules/drsoftfrcarrierproductbulk/src/UI/Admin/View/base.html.twig' %}
 
 {% block content %}
-    <div
-            x-data="carrierProductBulk"
-            x-init="initSelections()"
-            class="carrier-product-bulk-wrapper"
-    >
-        <h1>Carrier Product Bulk</h1>
-
-        <!-- Notifications -->
-        <template x-if="message">
-            <div class="alert alert-success" x-text="message" x-show="message" x-transition></div>
-        </template>
-
-        <!-- Résumé sélection -->
-        <div class="mb-4 p-2 bg-light border">
-            <strong>Transporteurs :</strong> <span x-text="selectedCarriers.length"></span> sélectionné(s) |
-            <strong>Produits :</strong> <span x-text="selectedProducts.length"></span> sélectionné(s)
-        </div>
-
-        <!-- Form Filtres + Liste Transporteurs -->
-        {% include '@Modules/drsoftfrcarrierproductbulk/views/templates/admin/_carrier_form.html.twig' %}
-        <div id="carriers-list">
-            {% include '@Modules/drsoftfrcarrierproductbulk/views/templates/admin/_carrier_list.html.twig' %}
-        </div>
-
-        <!-- Form Filtres + Liste Produits -->
-        {% include '@Modules/drsoftfrcarrierproductbulk/views/templates/admin/_product_form.html.twig' %}
-        <div id="products-list">
-            {% include '@Modules/drsoftfrcarrierproductbulk/views/templates/admin/_product_list.html.twig' %}
-        </div>
-
-        <!-- Actions Bulk -->
-        <div class="mt-4">
-            <button @click="submitAction('add')" class="btn btn-success">
-                ✅ Ajouter les transporteurs aux produits
-            </button>
-            <button @click="submitAction('remove')" class="btn btn-danger">
-                ❌ Retirer les transporteurs des produits
-            </button>
+    <div x-data="carrierProductBulk"
+         x-init="initSelections()"
+         class="carrier-product-bulk-wrapper card">
+        <div class="card-body">
+            <h1>Carrier Product Bulk</h1>
+            <template x-if="message">
+                <div class="alert alert-success" x-text="message" x-show="message" x-transition></div>
+            </template>
+            <div class="mb-4 p-2 bg-light border">
+                {{ '[1]Carriers:[/1] [2][/2] selected'|trans({'[1]': '<strong>', '[/1]': '</strong>', '[2]': '<span x-text="selectedCarriers.length">', '[/2]': '</span>'}, 'Modules.Drsoftfrcarrierproductbulk.Admin')|raw }}
+                &nbsp;|&nbsp;
+                {{ '[1]Products:[/1] [2][/2] selected'|trans({'[1]': '<strong>', '[/1]': '</strong>', '[2]': '<span x-text="selectedProducts.length">', '[/2]': '</span>'}, 'Modules.Drsoftfrcarrierproductbulk.Admin')|raw }}
+            </div>
+            {% include '@Modules/drsoftfrcarrierproductbulk/src/UI/Admin/View/partial/_carrier_form.html.twig' %}
+            <div id="carriers-list">
+                {% include '@Modules/drsoftfrcarrierproductbulk/src/UI/Admin/View/partial/_carrier_list.html.twig' %}
+            </div>
+            {% include '@Modules/drsoftfrcarrierproductbulk/src/UI/Admin/View/partial/_product_form.html.twig' %}
+            <div id="products-list">
+                {% include '@Modules/drsoftfrcarrierproductbulk/src/UI/Admin/View/partial/_product_list.html.twig' %}
+            </div>
+            <div class="card-actions">
+                <div class="mt-4">
+                    <button @click="submitAction('add')" class="btn btn-success">
+                        {{ '✅ Add carriers to products'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Actions') }}
+                    </button>
+                    <button @click="submitAction('remove')" class="btn btn-danger">
+                        {{ '❌ Remove carriers from products'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Actions') }}
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}
@@ -49,7 +42,6 @@
     <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.6/dist/htmx.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 
-    <!-- AlpineJS logique -->
     <script>
       document.addEventListener('alpine:init', () => {
         Alpine.data('carrierProductBulk', () => ({

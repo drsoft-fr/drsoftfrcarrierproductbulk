@@ -1,0 +1,62 @@
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <th><input type="checkbox" @change="toggleAll('carriers', $event)"></th>
+        <th>
+            {{ 'ID'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}
+        </th>
+        <th>
+            {{ 'Name'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}
+        </th>
+        <th>
+            {{ 'Free delivery'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}
+        </th>
+        <th>
+            {{ 'Active'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}
+        </th>
+        <th>
+            {{ 'Deleted'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for carrier in carriers %}
+        <tr>
+            <td>
+                <input type="checkbox" class="bulk-item" :value="{{ carrier.id_reference }}"
+                       :checked="selectedCarriers.includes({{ carrier.id_reference }})"
+                       @change="toggleItem('carriers', $event)">
+            </td>
+            <td>{{ carrier.id_reference }}</td>
+            <td>{{ carrier.name }}</td>
+            <td>
+                {% if carrier.is_free %}
+                    <span class="badge badge-success">{{ 'Yes'|trans({}, 'Admin.Global') }}</span>
+                {% else %}
+                    <span class="badge badge-danger">{{ 'No'|trans({}, 'Admin.Global') }}</span>
+                {% endif %}
+            </td>
+            <td>
+                {% if carrier.active %}
+                    <span class="badge badge-success">{{ 'Yes'|trans({}, 'Admin.Global') }}</span>
+                {% else %}
+                    <span class="badge badge-danger">{{ 'No'|trans({}, 'Admin.Global') }}</span>
+                {% endif %}
+            </td>
+            <td>
+                {% if carrier.deleted %}
+                    <span class="badge badge-success">{{ 'Yes'|trans({}, 'Admin.Global') }}</span>
+                {% else %}
+                    <span class="badge badge-danger">{{ 'No'|trans({}, 'Admin.Global') }}</span>
+                {% endif %}
+            </td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="6" class="text-center">
+                {{ 'No carrier found.'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

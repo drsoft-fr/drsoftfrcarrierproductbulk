@@ -32,7 +32,7 @@ final class CarrierProductBulkController extends FrameworkBundleAdminController
 {
     const TAB_CLASS_NAME = 'AdminDrSoftFrCarrierProductBulk';
     const PAGE_INDEX_ROUTE = 'admin_drsoft_fr_carrier_product_bulk_index';
-    const TEMPLATE_FOLDER = '@Modules/drsoftfrcarrierproductbulk/views/templates/admin/';
+    const TEMPLATE_FOLDER = '@Modules/drsoftfrcarrierproductbulk/src/UI/Admin/View/';
 
     private AddCarriersToProductsHandler $addHandler;
     private RemoveCarriersFromProductsHandler $removeHandler;
@@ -122,7 +122,7 @@ final class CarrierProductBulkController extends FrameworkBundleAdminController
         $filter = new CarrierFilterDto($request->query->all());
         $objs = $this->getCarriersHandler->handle(new GetCarriersQuery($filter));
 
-        return $this->render('@Modules/drsoftfrcarrierproductbulk/views/templates/admin/_carrier_list.html.twig', [
+        return $this->render(self::TEMPLATE_FOLDER . '/partial/_carrier_list.html.twig', [
             'carriers' => $objs,
         ]);
     }
@@ -132,7 +132,7 @@ final class CarrierProductBulkController extends FrameworkBundleAdminController
         $filter = new ProductFilterDto($request->query->all());
         $objs = $this->getProductsHandler->handle(new GetProductsQuery($filter));
 
-        return $this->render('@Modules/drsoftfrcarrierproductbulk/views/templates/admin/_product_list.html.twig', [
+        return $this->render(self::TEMPLATE_FOLDER . '/partial/_product_list.html.twig', [
             'products' => $objs,
         ]);
     }
