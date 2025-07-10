@@ -11,9 +11,15 @@ use DrSoftFr\Module\CarrierProductBulk\Application\CommandHandler\RemoveCarriers
 use DrSoftFr\Module\CarrierProductBulk\Application\Dto\CarrierFilterDto;
 use DrSoftFr\Module\CarrierProductBulk\Application\Dto\ProductFilterDto;
 use DrSoftFr\Module\CarrierProductBulk\Application\Query\GetCarriersQuery;
+use DrSoftFr\Module\CarrierProductBulk\Application\Query\GetCategoriesQuery;
+use DrSoftFr\Module\CarrierProductBulk\Application\Query\GetManufacturersQuery;
 use DrSoftFr\Module\CarrierProductBulk\Application\Query\GetProductsQuery;
+use DrSoftFr\Module\CarrierProductBulk\Application\Query\GetSuppliersQuery;
 use DrSoftFr\Module\CarrierProductBulk\Application\QueryHandler\GetCarriersHandler;
+use DrSoftFr\Module\CarrierProductBulk\Application\QueryHandler\GetCategoriesHandler;
+use DrSoftFr\Module\CarrierProductBulk\Application\QueryHandler\GetManufacturersHandler;
 use DrSoftFr\Module\CarrierProductBulk\Application\QueryHandler\GetProductsHandler;
+use DrSoftFr\Module\CarrierProductBulk\Application\QueryHandler\GetSuppliersHandler;
 use drsoftfrcarrierproductbulk;
 use PrestaShopBundle\Controller\Admin\FrameworkBundleAdminController;
 use PrestaShopBundle\Security\Annotation\AdminSecurity;
@@ -31,13 +37,20 @@ final class CarrierProductBulkController extends FrameworkBundleAdminController
     private AddCarriersToProductsHandler $addHandler;
     private RemoveCarriersFromProductsHandler $removeHandler;
     private GetCarriersHandler $getCarriersHandler;
+    private GetCategoriesHandler $getCategoriesHandler;
+    private GetManufacturersHandler $getManufacturersHandler;
     private GetProductsHandler $getProductsHandler;
+    private GetSuppliersHandler $getSuppliersHandler;
 
     public function __construct(
         AddCarriersToProductsHandler      $addHandler,
         RemoveCarriersFromProductsHandler $removeHandler,
         GetCarriersHandler                $getCarriersHandler,
-        GetProductsHandler                $getProductsHandler
+        GetCategoriesHandler              $getCategoriesHandler,
+        GetManufacturersHandler           $getManufacturersHandler,
+        GetProductsHandler                $getProductsHandler,
+        GetSuppliersHandler               $getSuppliersHandler
+
     )
     {
         parent::__construct();
@@ -45,7 +58,10 @@ final class CarrierProductBulkController extends FrameworkBundleAdminController
         $this->addHandler = $addHandler;
         $this->removeHandler = $removeHandler;
         $this->getCarriersHandler = $getCarriersHandler;
+        $this->getCategoriesHandler = $getCategoriesHandler;
+        $this->getManufacturersHandler = $getManufacturersHandler;
         $this->getProductsHandler = $getProductsHandler;
+        $this->getSuppliersHandler = $getSuppliersHandler;
     }
 
     /**
@@ -68,17 +84,20 @@ final class CarrierProductBulkController extends FrameworkBundleAdminController
             'limit' => 10
         ]);
 
-        $query = new GetCarriersQuery($carrierFilterDto);
-        $carriers = $this->getCarriersHandler->handle($query);
-
-        $query = new GetProductsQuery($productFilterDto);
-        $products = $this->getProductsHandler->handle($query);
+        $carriers = $this->getCarriersHandler->handle(new GetCarriersQuery($carrierFilterDto));
+        $products = $this->getProductsHandler->handle(new GetProductsQuery($productFilterDto));
+        $categories = $this->getCategoriesHandler->handle(new GetCategoriesQuery(false));
+        $manufacturers = $this->getManufacturersHandler->handle(new GetManufacturersQuery());
+        $suppliers = $this->getSuppliersHandler->handle(new GetSuppliersQuery());
 
         return $this->render(self::TEMPLATE_FOLDER . 'index.html.twig', [
             'enableSidebar' => true,
             'help_link' => $this->generateSidebarLink($request->attributes->get('_legacy_controller')),
+            'categories' => $categories,
             'carriers' => $carriers,
+            'manufacturers' => $manufacturers,
             'products' => $products,
+            'suppliers' => $suppliers,
             'module' => $this->getModule(),
         ]);
     }

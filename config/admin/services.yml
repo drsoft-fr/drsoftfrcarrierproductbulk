@@ -8,7 +8,10 @@ services:
       $addHandler: '@drsoft_fr.module.carrier_product_bulk.application.command_handler.add_carriers_to_products_handler'
       $removeHandler: '@drsoft_fr.module.carrier_product_bulk.application.command_handler.remove_carriers_from_products_handler'
       $getCarriersHandler: '@drsoft_fr.module.carrier_product_bulk.application.query_handler.get_carriers_handler'
+      $getCategoriesHandler: '@drsoft_fr.module.carrier_product_bulk.application.query_handler.get_categories_handler'
+      $getManufacturersHandler: '@drsoft_fr.module.carrier_product_bulk.application.query_handler.get_manufacturers_handler'
       $getProductsHandler: '@drsoft_fr.module.carrier_product_bulk.application.query_handler.get_products_handler'
+      $getSuppliersHandler: '@drsoft_fr.module.carrier_product_bulk.application.query_handler.get_suppliers_handler'
     tags: [ 'controller.service_arguments' ]
 
   drsoft_fr.module.carrier_product_bulk.infrastructure.persistence.doctrine.carrier_repository:
@@ -18,6 +21,13 @@ services:
       - '@=service("prestashop.adapter.legacy.context").getContext().shop.id'
       - '%database_prefix%'
     public: true
+
+  drsoft_fr.module.carrier_product_bulk.prestashop.repository.category_repository:
+    class: PrestaShopBundle\Entity\Repository\CategoryRepository
+    arguments:
+      - "@doctrine.dbal.default_connection"
+      - "@prestashop.adapter.legacy.context"
+      - "%database_prefix%"
 
   drsoft_fr.module.carrier_product_bulk.infrastructure.persistence.doctrine.product_carrier_repository:
     class: DrSoftFr\Module\CarrierProductBulk\Infrastructure\Persistence\Doctrine\ProductCarrierRepository
@@ -35,6 +45,20 @@ services:
       - '@=service("prestashop.adapter.legacy.context").getContext().shop.id'
       - '%database_prefix%'
     public: true
+
+  drsoft_fr.module.carrier_product_bulk.prestashop.repository.manufacturer_repository:
+    class: PrestaShopBundle\Entity\Repository\ManufacturerRepository
+    arguments:
+      - "@doctrine.dbal.default_connection"
+      - "@prestashop.adapter.legacy.context"
+      - "%database_prefix%"
+
+  drsoft_fr.module.carrier_product_bulk.prestashop.repository.supplier_repository:
+    class: PrestaShopBundle\Entity\Repository\SupplierRepository
+    arguments:
+      - "@doctrine.dbal.default_connection"
+      - "@prestashop.adapter.legacy.context"
+      - "%database_prefix%"
 
   drsoft_fr.module.carrier_product_bulk.domain.service.carrier_product_service:
     class: DrSoftFr\Module\CarrierProductBulk\Domain\Service\CarrierProductService
@@ -76,4 +100,22 @@ services:
     class: DrSoftFr\Module\CarrierProductBulk\Application\QueryHandler\GetProductsHandler
     arguments:
       - '@drsoft_fr.module.carrier_product_bulk.infrastructure.persistence.doctrine.product_repository'
+    public: true
+
+  drsoft_fr.module.carrier_product_bulk.application.query_handler.get_categories_handler:
+    class: DrSoftFr\Module\CarrierProductBulk\Application\QueryHandler\GetCategoriesHandler
+    arguments:
+      - '@drsoft_fr.module.carrier_product_bulk.prestashop.repository.category_repository'
+    public: true
+
+  drsoft_fr.module.carrier_product_bulk.application.query_handler.get_manufacturers_handler:
+    class: DrSoftFr\Module\CarrierProductBulk\Application\QueryHandler\GetManufacturersHandler
+    arguments:
+      - '@drsoft_fr.module.carrier_product_bulk.prestashop.repository.manufacturer_repository'
+    public: true
+
+  drsoft_fr.module.carrier_product_bulk.application.query_handler.get_suppliers_handler:
+    class: DrSoftFr\Module\CarrierProductBulk\Application\QueryHandler\GetSuppliersHandler
+    arguments:
+      - '@drsoft_fr.module.carrier_product_bulk.prestashop.repository.supplier_repository'
     public: true
