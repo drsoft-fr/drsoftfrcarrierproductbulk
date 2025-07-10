@@ -4,6 +4,8 @@ namespace DrSoftFr\Module\CarrierProductBulk\Application\Dto;
 
 final class CarrierFilterDto
 {
+    private const MIN_VALID_ID = 1;
+
     public ?int $idReference = null;
     public ?string $name = null;
     public ?bool $isFree = null;
@@ -14,12 +16,44 @@ final class CarrierFilterDto
 
     public function __construct(array $data)
     {
-        $this->idReference = isset($data['idReference']) && 0 < (int)$data['idReference'] ? (int)$data['idReference'] : null;
-        $this->name = false === empty($data['name']) ? strip_tags($data['name']) : null;
-        $this->isFree = isset($data['isFree']) && "" !== $data['isFree'] ? (bool)$data['isFree'] : null;
-        $this->deleted = isset($data['deleted']) && "" !== $data['deleted'] ? (bool)$data['deleted'] : null;
-        $this->active = isset($data['active']) && "" !== $data['active'] ? (bool)$data['active'] : null;
-        $this->limit = isset($data['limit']) && "" !== $data['limit'] ? (int)$data['limit'] : null;
-        $this->offset = isset($data['offset']) && "" !== $data['offset'] ? (int)$data['offset'] : null;
+        $this->idReference = $this->initializeIdValue($data, 'idReference');
+        $this->name = $this->initializeStringValue($data, 'name');
+        $this->isFree = $this->initializeBoolValue($data, 'isFree');
+        $this->deleted = $this->initializeBoolValue($data, 'deleted');
+        $this->active = $this->initializeBoolValue($data, 'active');
+        $this->limit = $this->initializeIntValue($data, 'limit');
+        $this->offset = $this->initializeIntValue($data, 'offset');
+    }
+
+    /**
+     * Initializes and retrieves an integer ID value from provided data if valid.
+     */
+    private function initializeIdValue(array $data, string $key): ?int
+    {
+        return isset($data[$key]) && self::MIN_VALID_ID <= (int)$data[$key] ? (int)$data[$key] : null;
+    }
+
+    /**
+     * Initializes a nullable integer from the data array.
+     */
+    private function initializeIntValue(array $data, string $key): ?int
+    {
+        return isset($data[$key]) && "" !== $data[$key] ? (int)$data[$key] : null;
+    }
+
+    /**
+     * Initializes a nullable string from the data array.
+     */
+    private function initializeStringValue(array $data, string $key): ?string
+    {
+        return !empty($data[$key]) ? strip_tags($data[$key]) : null;
+    }
+
+    /**
+     * Initializes a nullable boolean from the data array.
+     */
+    private function initializeBoolValue(array $data, string $key): ?bool
+    {
+        return isset($data[$key]) && "" !== $data[$key] ? (bool)$data[$key] : null;
     }
 }

@@ -22,19 +22,19 @@ final class ProductFilterDto
 
     public function __construct(array $data)
     {
-        $this->idProduct = isset($data['idProduct']) && 0 < (int)$data['idProduct'] ? (int)$data['idProduct'] : null;
-        $this->name = false === empty($data['name']) ? strip_tags($data['name']) : null;
-        $this->reference = false === empty($data['reference']) ? strip_tags($data['reference']) : null;
-        $this->supplierReference = false === empty($data['supplierReference']) ? strip_tags($data['supplierReference']) : null;
+        $this->idProduct = $this->initializeIdValue($data, 'idProduct');
+        $this->name = $this->initializeStringValue($data, 'name');
+        $this->reference = $this->initializeStringValue($data, 'reference');
+        $this->supplierReference = $this->initializeStringValue($data, 'supplierReference');
         $this->idCategoryDefault = $this->hydrateArrayId($data['idCategoryDefault'] ?? []);
         $this->idCategory = $this->hydrateArrayId($data['idCategory'] ?? []);
         $this->idSupplier = $this->hydrateArrayId($data['idSupplier'] ?? []);
         $this->idManufacturer = $this->hydrateArrayId($data['idManufacturer'] ?? []);
-        $this->weightMin = isset($data['weightMin']) && "" !== $data['weightMin'] ? (float)$data['weightMin'] : null;
-        $this->weightMax = isset($data['weightMax']) && "" !== $data['weightMax'] ? (float)$data['weightMax'] : null;
-        $this->active = isset($data['active']) && "" !== $data['active'] ? (bool)$data['active'] : null;
-        $this->limit = isset($data['limit']) && "" !== $data['limit'] ? (int)$data['limit'] : null;
-        $this->offset = isset($data['offset']) && "" !== $data['offset'] ? (int)$data['offset'] : null;
+        $this->weightMin = $this->initializeFloatValue($data, 'weightMin');
+        $this->weightMax = $this->initializeFloatValue($data, 'weightMax');
+        $this->active = $this->initializeBoolValue($data, 'active');
+        $this->limit = $this->initializeIntValue($data, 'limit');
+        $this->offset = $this->initializeIntValue($data, 'offset');
     }
 
     /**
@@ -61,4 +61,43 @@ final class ProductFilterDto
         return $id >= self::MIN_VALID_ID;
     }
 
+    /**
+     * Initializes and retrieves an integer ID value from provided data if valid.
+     */
+    private function initializeIdValue(array $data, string $key): ?int
+    {
+        return isset($data[$key]) && self::MIN_VALID_ID <= (int)$data[$key] ? (int)$data[$key] : null;
+    }
+
+    /**
+     * Initializes a nullable integer from the data array.
+     */
+    private function initializeIntValue(array $data, string $key): ?int
+    {
+        return isset($data[$key]) && "" !== $data[$key] ? (int)$data[$key] : null;
+    }
+
+    /**
+     * Initializes a nullable string from the data array.
+     */
+    private function initializeStringValue(array $data, string $key): ?string
+    {
+        return !empty($data[$key]) ? strip_tags($data[$key]) : null;
+    }
+
+    /**
+     * Initializes a nullable float from the data array.
+     */
+    private function initializeFloatValue(array $data, string $key): ?float
+    {
+        return isset($data[$key]) && "" !== $data[$key] ? (float)$data[$key] : null;
+    }
+
+    /**
+     * Initializes a nullable boolean from the data array.
+     */
+    private function initializeBoolValue(array $data, string $key): ?bool
+    {
+        return isset($data[$key]) && "" !== $data[$key] ? (bool)$data[$key] : null;
+    }
 }
