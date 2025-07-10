@@ -6,18 +6,20 @@ use DrSoftFr\Module\CarrierProductBulk\Infrastructure\Persistence\Doctrine\Produ
 
 final class CarrierProductService
 {
-    private ProductCarrierRepository $productCarrierRepository;
+    private ProductCarrierRepository $repository;
 
-    public function __construct(ProductCarrierRepository $productCarrierRepository)
+    public function __construct(ProductCarrierRepository $repository)
     {
-        $this->productCarrierRepository = $productCarrierRepository;
+        $this->repository = $repository;
     }
 
     public function addCarriersToProducts(array $carrierIds, array $productIds): void
     {
         foreach ($productIds as $productId) {
-            foreach ($carrierIds as $carrierReferenceId) {
-                $this->productCarrierRepository->addCarrierToProduct($carrierReferenceId, $productId);
+            $this->repository->removeCarriersFromProduct($carrierIds, $productId);
+
+            foreach ($carrierIds as $carrierId) {
+                $this->repository->addCarrierToProduct($carrierId, $productId);
             }
         }
     }
@@ -25,7 +27,7 @@ final class CarrierProductService
     public function removeCarriersFromProducts(array $carrierIds, array $productIds): void
     {
         foreach ($productIds as $productId) {
-            $this->productCarrierRepository->removeCarriersFromProduct($carrierIds, $productId);
+            $this->repository->removeCarriersFromProduct($carrierIds, $productId);
         }
     }
 }
