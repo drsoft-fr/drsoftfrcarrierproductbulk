@@ -7,7 +7,8 @@
         <div class="card-body">
             <h1>Carrier Product Bulk</h1>
             <template x-if="message">
-                <div class="alert alert-success" x-text="message" x-show="message" x-transition></div>
+                <div class="alert" :class="type ? 'alert-' + type : 'alert-success'" x-text="message" x-show="message"
+                     x-transition></div>
             </template>
             <div class="mb-4 p-2 bg-light border">
                 {{ '[1]Carriers:[/1] [2][/2] selected'|trans({'[1]': '<strong>', '[/1]': '</strong>', '[2]': '<span x-text="selectedCarriers.length">', '[/2]': '</span>'}, 'Modules.Drsoftfrcarrierproductbulk.Admin')|raw }}
@@ -48,6 +49,7 @@
           selectedCarriers: [],
           selectedProducts: [],
           message: '',
+          type: '',
 
           initSelections() {
             this.syncSelections('carriers')
@@ -91,7 +93,8 @@
 
           submitAction(action) {
             if (this.selectedCarriers.length === 0 || this.selectedProducts.length === 0) {
-              this.message = 'Sélection incomplète.'
+              this.message = '{{ 'Incomplete selection.'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Error') }}'
+              this.type = 'danger'
               return
             }
             fetch('{{ path('admin_drsoft_fr_carrier_product_bulk_ajax') }}', {
@@ -106,7 +109,11 @@
               .then(r => r.json())
               .then(data => {
                 this.message = data.message
-                setTimeout(() => this.message = '', 4000)
+                this.type = data.type
+                setTimeout(() => {
+                  this.message = ''
+                  this.type = ''
+                }, 4000)
               })
           }
         }))

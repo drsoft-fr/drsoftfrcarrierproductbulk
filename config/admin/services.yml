@@ -5,6 +5,7 @@ services:
 
   DrSoftFr\Module\CarrierProductBulk\UI\Admin\Controller\CarrierProductBulkController:
     arguments:
+      $module: '@drsoft_fr.module.carrier_product_bulk.module'
       $addHandler: '@drsoft_fr.module.carrier_product_bulk.application.command_handler.add_carriers_to_products_handler'
       $removeHandler: '@drsoft_fr.module.carrier_product_bulk.application.command_handler.remove_carriers_from_products_handler'
       $getCarriersHandler: '@drsoft_fr.module.carrier_product_bulk.application.query_handler.get_carriers_handler'

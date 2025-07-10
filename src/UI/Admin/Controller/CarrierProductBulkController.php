@@ -31,9 +31,9 @@ use Symfony\Component\HttpFoundation\Response;
 final class CarrierProductBulkController extends FrameworkBundleAdminController
 {
     const TAB_CLASS_NAME = 'AdminDrSoftFrCarrierProductBulk';
-    const PAGE_INDEX_ROUTE = 'admin_drsoft_fr_carrier_product_bulk_index';
     const TEMPLATE_FOLDER = '@Modules/drsoftfrcarrierproductbulk/src/UI/Admin/View/';
 
+    private drsoftfrcarrierproductbulk $module;
     private AddCarriersToProductsHandler $addHandler;
     private RemoveCarriersFromProductsHandler $removeHandler;
     private GetCarriersHandler $getCarriersHandler;
@@ -43,6 +43,7 @@ final class CarrierProductBulkController extends FrameworkBundleAdminController
     private GetSuppliersHandler $getSuppliersHandler;
 
     public function __construct(
+        drsoftfrcarrierproductbulk        $module,
         AddCarriersToProductsHandler      $addHandler,
         RemoveCarriersFromProductsHandler $removeHandler,
         GetCarriersHandler                $getCarriersHandler,
@@ -55,6 +56,7 @@ final class CarrierProductBulkController extends FrameworkBundleAdminController
     {
         parent::__construct();
 
+        $this->module = $module;
         $this->addHandler = $addHandler;
         $this->removeHandler = $removeHandler;
         $this->getCarriersHandler = $getCarriersHandler;
@@ -77,13 +79,8 @@ final class CarrierProductBulkController extends FrameworkBundleAdminController
      */
     public function indexAction(Request $request): Response
     {
-        $carrierFilterDto = new CarrierFilterDto([
-            'limit' => 10
-        ]);
-        $productFilterDto = new ProductFilterDto([
-            'limit' => 10
-        ]);
-
+        $carrierFilterDto = new CarrierFilterDto(['limit' => 10]);
+        $productFilterDto = new ProductFilterDto(['limit' => 10]);
         $carriers = $this->getCarriersHandler->handle(new GetCarriersQuery($carrierFilterDto));
         $products = $this->getProductsHandler->handle(new GetProductsQuery($productFilterDto));
         $categories = $this->getCategoriesHandler->handle(new GetCategoriesQuery(false));
@@ -98,25 +95,65 @@ final class CarrierProductBulkController extends FrameworkBundleAdminController
             'manufacturers' => $manufacturers,
             'products' => $products,
             'suppliers' => $suppliers,
-            'module' => $this->getModule(),
+            'module' => $this->module,
         ]);
     }
 
+    /**
+     * @AdminSecurity(
+     *     "is_granted(['create', 'delete', 'update', 'read'], request.get('_legacy_controller'))",
+     *     redirectRoute="admin_drsoft_fr_carrier_product_bulk_index",
+     *     message="You do not have permission to edit this."
+     * )
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
     public function ajaxAction(Request $request): JsonResponse
     {
-        $data = json_decode($request->getContent(), true);
+        try {
+            $data = json_decode($request->getContent(), true);
 
-        if ($data['action'] === 'add') {
-            $this->addHandler->handle(new AddCarriersToProductsCommand($data['carriers'], $data['products']));
-            return new JsonResponse(['message' => 'Transporteurs ajoutés avec succès !']);
-        } elseif ($data['action'] === 'remove') {
-            $this->removeHandler->handle(new RemoveCarriersFromProductsCommand($data['carriers'], $data['products']));
-            return new JsonResponse(['message' => 'Transporteurs retirés avec succès !']);
+            if ($data['action'] === 'add') {
+                $this->addHandler->handle(new AddCarriersToProductsCommand($data['carriers'], $data['products']));
+
+                return new JsonResponse([
+                    'message' => $this->trans('Carriers added with success!', 'Modules.Drsoftfrcarrierproductbulk.Success'),
+                    'type' => 'success'
+                ]);
+            } elseif ($data['action'] === 'remove') {
+                $this->removeHandler->handle(new RemoveCarriersFromProductsCommand($data['carriers'], $data['products']));
+
+                return new JsonResponse([
+                    'message' => $this->trans('Transporters successfully removed!', 'Modules.Drsoftfrcarrierproductbulk.Success'),
+                    'type' => 'success'
+                ]);
+            }
+
+            return new JsonResponse([
+                'message' => $this->trans('Action not recognized.', 'Modules.Drsoftfrcarrierproductbulk.Error'),
+                'type' => 'danger'
+            ], 400);
+        } catch (\Throwable $t) {
+            return new JsonResponse([
+                'message' => $this->trans('An error occurred when adding carriers.', 'Modules.Drsoftfrcarrierproductbulk.Error'),
+                'type' => 'danger'
+            ], 400);
         }
-
-        return new JsonResponse(['message' => 'Action non reconnue.'], 400);
     }
 
+    /**
+     * @AdminSecurity(
+     *     "is_granted('read', request.get('_legacy_controller'))",
+     *     redirectRoute="admin_drsoft_fr_carrier_product_bulk_index",
+     *     message="You do not have permission to read this."
+     * )
+     *
+     * @param Request $request
+     *
+     * @return Response
+     */
     public function carrierListAction(Request $request): Response
     {
         $filter = new CarrierFilterDto($request->query->all());
@@ -127,6 +164,17 @@ final class CarrierProductBulkController extends FrameworkBundleAdminController
         ]);
     }
 
+    /**
+     * @AdminSecurity(
+     *     "is_granted('read', request.get('_legacy_controller'))",
+     *     redirectRoute="admin_drsoft_fr_carrier_product_bulk_index",
+     *     message="You do not have permission to read this."
+     * )
+     *
+     * @param Request $request
+     *
+     * @return Response
+     */
     public function productListAction(Request $request): Response
     {
         $filter = new ProductFilterDto($request->query->all());
@@ -135,14 +183,5 @@ final class CarrierProductBulkController extends FrameworkBundleAdminController
         return $this->render(self::TEMPLATE_FOLDER . '/partial/_product_list.html.twig', [
             'products' => $objs,
         ]);
-    }
-
-    /**
-     * @return drsoftfrcarrierproductbulk
-     */
-    protected function getModule(): drsoftfrcarrierproductbulk
-    {
-        /** @type drsoftfrcarrierproductbulk */
-        return $this->get('drsoft_fr.module.carrier_product_bulk.module');
     }
 }
