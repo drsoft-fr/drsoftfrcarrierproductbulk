@@ -32,4 +32,12 @@
         </div>
     </div>
     <button type="submit" class="btn btn-primary">Rechercher Transporteurs</button>
+    <button type="button"
+            class="btn btn-default"
+            @click="
+      $el.closest('form').reset();
+      $el.closest('form').dispatchEvent(new Event('submit', { bubbles: true }))
+    ">
+        Réinitialiser
+    </button>
 </form>
