@@ -2,20 +2,25 @@
 
 namespace DrSoftFr\Module\CarrierProductBulk\Application\QueryHandler;
 
+use DrSoftFr\Module\CarrierProductBulk\Application\Dto\SupplierDto;
 use DrSoftFr\Module\CarrierProductBulk\Application\Query\GetSuppliersQuery;
-use PrestaShopBundle\Entity\Repository\SupplierRepository;
+use DrSoftFr\Module\CarrierProductBulk\Domain\Repository\SupplierRepositoryInterface;
 
 final class GetSuppliersHandler
 {
-    private SupplierRepository $repository;
+    private SupplierRepositoryInterface $repository;
 
-    public function __construct(SupplierRepository $repository)
+    public function __construct(SupplierRepositoryInterface $repository)
     {
         $this->repository = $repository;
     }
 
     public function handle(GetSuppliersQuery $query): array
     {
-        return $this->repository->getSuppliers();
+        $suppliers = $this->repository->getSuppliers();
+
+        return array_map(function ($supplier) {
+            return new SupplierDto($supplier['supplier_id'], $supplier['name']);
+        }, $suppliers);
     }
 }

@@ -26,7 +26,7 @@ final class CarrierFilterDto
         $this->active = $this->initializeBoolValue($data, 'active');
         $this->page = $this->initializePageOrLimitValue($data, 'page', self::DEFAULT_PAGE);
         $this->limit = $this->initializePageOrLimitValue($data, 'limit', self::DEFAULT_LIMIT);
-        $this->offset = $this->initializeOffsetValue($data, 'offset') ?? 0;
+        $this->offset = $this->initializeOffsetValue() ?? 0;
     }
 
     public function toArray(): array
@@ -54,7 +54,7 @@ final class CarrierFilterDto
     /**
      * Initializes the offset value based on the current page and limit settings.
      */
-    private function initializeOffsetValue(array $data, string $key): ?int
+    private function initializeOffsetValue(): ?int
     {
         return ($this->page - 1) * $this->limit;
     }

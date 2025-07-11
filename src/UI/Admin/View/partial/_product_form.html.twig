@@ -42,7 +42,6 @@
                    placeholder="{{ 'Max. weight'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}">
         </div>
     </div>
-    <!-- Catégories, Fournisseurs etc -->
     <div class="row mb-2">
         <div class="col-md-2">
             <label for="product-filters__id-category-default"
@@ -51,7 +50,7 @@
                     aria-multiselectable="true">
                 <option value="">{{ 'No category selected'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}</option>
                 {% for category in categories %}
-                    <option value="{{ category.id_category }}">{{ category.name }}</option>
+                    <option value="{{ category.id }}">{{ category.name }}</option>
                 {% endfor %}
             </select>
         </div>
@@ -62,7 +61,7 @@
                     aria-multiselectable="true">
                 <option value="">{{ 'No category selected'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}</option>
                 {% for category in categories %}
-                    <option value="{{ category.id_category }}">{{ category.name }}</option>
+                    <option value="{{ category.id }}">{{ category.name }}</option>
                 {% endfor %}
             </select>
         </div>
@@ -73,7 +72,7 @@
                     aria-multiselectable="true">
                 <option value="">{{ 'No supplier selected'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}</option>
                 {% for supplier in suppliers %}
-                    <option value="{{ supplier.supplier_id }}">{{ supplier.name }}</option>
+                    <option value="{{ supplier.id }}">{{ supplier.name }}</option>
                 {% endfor %}
             </select>
         </div>
@@ -84,7 +83,7 @@
                     aria-multiselectable="true">
                 <option value="">{{ 'No manufacturer selected'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}</option>
                 {% for manufacturer in manufacturers %}
-                    <option value="{{ manufacturer.manufacturer_id }}">{{ manufacturer.name }}</option>
+                    <option value="{{ manufacturer.id }}">{{ manufacturer.name }}</option>
                 {% endfor %}
             </select>
         </div>

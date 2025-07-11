@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use DrSoftFr\Module\CarrierProductBulk\Config;
 use DrSoftFr\Module\CarrierProductBulk\UI\Admin\Controller\CarrierProductBulkController;
 use PrestaShop\PrestaShop\Core\Cache\Clearer\CacheClearerChain;
 
@@ -21,6 +20,8 @@ if (file_exists($autoloadPath)) {
  */
 class drsoftfrcarrierproductbulk extends Module
 {
+    const ERROR_MESSAGE_PATTERN = 'drsoftfrcarrierproductbulk - %s - %d - Throwable #%d - %s.';
+
     /**
      * @var string $authorEmail Author email
      */
@@ -86,10 +87,10 @@ class drsoftfrcarrierproductbulk extends Module
                         'An error has occurred when deactivating the module.',
                         [],
                         'Modules.Drsoftfrcarrierproductbulk.Error'
-                    ),
-                    __METHOD__,
-                    __LINE__
-                )
+                    )
+                ),
+                __METHOD__,
+                __LINE__
             );
 
             return false;
@@ -120,10 +121,10 @@ class drsoftfrcarrierproductbulk extends Module
                         'An error has occurred when activating the module.',
                         [],
                         'Modules.Drsoftfrcarrierproductbulk.Error'
-                    ),
-                    __METHOD__,
-                    __LINE__
-                )
+                    )
+                ),
+                __METHOD__,
+                __LINE__
             );
 
             return false;
@@ -179,7 +180,7 @@ class drsoftfrcarrierproductbulk extends Module
      */
     private function handleException(Throwable $t, string $method = __METHOD__, int $line = __LINE__): void
     {
-        $errorMessage = Config::createErrorMessage($method, $line, $t);
+        $errorMessage = sprintf(self::ERROR_MESSAGE_PATTERN, $method, $line, $t->getCode(), $t->getMessage());
 
         PrestaShopLogger::addLog($errorMessage, 3);
 
@@ -206,10 +207,10 @@ class drsoftfrcarrierproductbulk extends Module
                         'There was an error during the installation.',
                         [],
                         'Modules.Drsoftfrcarrierproductbulk.Error'
-                    ),
-                    __METHOD__,
-                    __LINE__
-                )
+                    )
+                ),
+                __METHOD__,
+                __LINE__
             );
 
             return false;
@@ -246,10 +247,10 @@ class drsoftfrcarrierproductbulk extends Module
                         'There was an error during the uninstallation.',
                         [],
                         'Modules.Drsoftfrcarrierproductbulk.Error'
-                    ),
-                    __METHOD__,
-                    __LINE__
-                )
+                    )
+                ),
+                __METHOD__,
+                __LINE__
             );
 
             return false;
