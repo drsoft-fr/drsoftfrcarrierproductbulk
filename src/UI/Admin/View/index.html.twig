@@ -1,0 +1,230 @@
+{% extends '@Modules/drsoftfrcarrierproductbulk/src/UI/Admin/View/base.html.twig' %}
+
+{% block content %}
+    <div x-data="carrierProductBulk"
+         x-init="initSelections()"
+         class="carrier-product-bulk-wrapper card">
+        <div class="card-body">
+            <div x-show="loading" x-transition.opacity class="loader-overlay">
+                <div class="loader-spinner"></div>
+            </div>
+            <h1>Carrier Product Bulk</h1>
+            <template x-if="message">
+                <div class="alert" :class="type ? 'alert-' + type : 'alert-success'" x-text="message" x-show="message"
+                     x-transition></div>
+            </template>
+            <div class="mb-4 p-2 bg-light border">
+                {{ '[1]Carriers:[/1] [2][/2] selected'|trans({'[1]': '<strong>', '[/1]': '</strong>', '[2]': '<span x-text="selectedCarriers.length">', '[/2]': '</span>'}, 'Modules.Drsoftfrcarrierproductbulk.Admin')|raw }}
+                &nbsp;|&nbsp;
+                {{ '[1]Products:[/1] [2][/2] selected'|trans({'[1]': '<strong>', '[/1]': '</strong>', '[2]': '<span x-text="selectedProducts.length">', '[/2]': '</span>'}, 'Modules.Drsoftfrcarrierproductbulk.Admin')|raw }}
+            </div>
+            {% include '@Modules/drsoftfrcarrierproductbulk/src/UI/Admin/View/partial/_carrier_form.html.twig' %}
+            <div id="carriers-list">
+                {% include '@Modules/drsoftfrcarrierproductbulk/src/UI/Admin/View/partial/_carrier_list.html.twig' %}
+            </div>
+            <hr>
+            {% include '@Modules/drsoftfrcarrierproductbulk/src/UI/Admin/View/partial/_product_form.html.twig' %}
+            <div id="products-list">
+                {% include '@Modules/drsoftfrcarrierproductbulk/src/UI/Admin/View/partial/_product_list.html.twig' %}
+            </div>
+            <div class="card-actions">
+                <div class="mt-4 row">
+                    <div class="col-12 col-md-6">
+                        <button @click="submitAction('add')" class="btn btn-success w-100">
+                            {{ '✅ Add carriers to products'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Actions') }}
+                        </button>
+                    </div>
+                    <div class="col-12 col-md-6 mt-3 mt-md-0">
+                        <button @click="submitAction('remove')" class="btn btn-danger w-100">
+                            {{ '❌ Remove carriers from products'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Actions') }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+
+    <style>
+        .loader-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .loader-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid var(--light);
+            border-top: 5px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.6/dist/htmx.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+
+    <script>
+      document.addEventListener('alpine:init', () => {
+        Alpine.data('carrierProductBulk', () => ({
+          loading: false,
+          selectedCarriers: [],
+          selectedProducts: [],
+          message: '',
+          type: '',
+
+          initSelections() {
+            this.syncSelections('carriers')
+            this.syncSelections('products')
+            document.body.addEventListener('htmx:beforeRequest', () => this.loading = true)
+            document.body.addEventListener('htmx:afterOnLoad', () => this.loading = false)
+            document.body.addEventListener('htmx:sendError', () => this.loading = false)
+          },
+
+          toggleItem(type, event) {
+            const id = parseInt(event.target.value)
+            let array = type === 'carriers' ? this.selectedCarriers : this.selectedProducts
+            if (event.target.checked) {
+              if (!array.includes(id)) array.push(id)
+            } else {
+              array = array.filter(i => i !== id)
+            }
+            if (type === 'carriers') this.selectedCarriers = array
+            else this.selectedProducts = array
+          },
+
+          toggleAll(type, event) {
+            const checkboxes = document.querySelectorAll(`#${type}-list input[type="checkbox"].bulk-item`)
+            let array = []
+            if (event.target.checked) {
+              checkboxes.forEach(cb => {
+                cb.checked = true
+                array.push(parseInt(cb.value))
+              })
+            } else {
+              checkboxes.forEach(cb => cb.checked = false)
+            }
+            if (type === 'carriers') this.selectedCarriers = array
+            else this.selectedProducts = array
+          },
+
+          syncSelections(type) {
+            let array = type === 'carriers' ? this.selectedCarriers : this.selectedProducts
+            const checkboxes = document.querySelectorAll(`#${type}-list input[type="checkbox"].bulk-item`)
+            checkboxes.forEach(cb => {
+              cb.checked = array.includes(parseInt(cb.value))
+            })
+          },
+
+          submitAction(action) {
+            this.loading = true
+            if (this.selectedCarriers.length === 0 || this.selectedProducts.length === 0) {
+              this.message = '{{ 'Incomplete selection.'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Error') }}'
+              this.type = 'danger'
+              this.loading = false
+              return
+            }
+            fetch('{{ path('admin_drsoft_fr_carrier_product_bulk_ajax') }}', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                action: action,
+                carriers: this.selectedCarriers,
+                products: this.selectedProducts
+              })
+            })
+              .then(r => r.json())
+              .then(data => {
+                this.message = data.message
+                this.type = data.type
+                this.loading = false
+                setTimeout(() => {
+                  this.message = ''
+                  this.type = ''
+                }, 4000)
+              })
+              .catch(error => {
+                console.error('Error during action: ' + action, error)
+                this.message = '{{ 'An error occurred during the operation.'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Error') }}'
+                this.type = 'danger'
+                this.loading = false
+              })
+          },
+
+          submitForm(id) {
+            /** @type {HTMLFormElement} */
+            const formElm = document.getElementById(id)
+
+            if (!formElm) {
+              this.message = `#${id} form filter not found`
+              this.type = 'danger'
+              setTimeout(() => {
+                this.message = ''
+                this.type = ''
+              }, 4000)
+
+              return
+            }
+
+            formElm.dispatchEvent(new Event('submit', { bubbles: true }))
+          },
+
+          updateLimitAndSubmit(limit, page, id) {
+            const pageInputElm = document.querySelector(`#${id} [name=page]`)
+            const limitInputElm = document.querySelector(`#${id} [name=limit]`)
+
+            if (!pageInputElm) {
+              this.message = `#${id} input page not found`
+              this.type = 'danger'
+              setTimeout(() => {
+                this.message = ''
+                this.type = ''
+              }, 4000)
+
+              return
+            }
+
+            if (!limitInputElm) {
+              this.message = `#${id} input limit not found`
+              this.type = 'danger'
+              setTimeout(() => {
+                this.message = ''
+                this.type = ''
+              }, 4000)
+
+              return
+            }
+
+            pageInputElm.value = page
+            limitInputElm.value = limit
+
+            this.submitForm(id)
+          }
+        }))
+      })
+    </script>
+{% endblock %}

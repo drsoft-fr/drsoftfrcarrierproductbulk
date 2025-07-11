@@ -1,0 +1,60 @@
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <th><input type="checkbox" @change="toggleAll('products', $event)"></th>
+        <th>
+            {{ 'ID'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}
+        </th>
+        <th>
+            {{ 'Name'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}
+        </th>
+        <th>
+            {{ 'Reference'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}
+        </th>
+        <th>
+            {{ 'Supplier ref.'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}
+        </th>
+        <th>
+            {{ 'Default category'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}
+        </th>
+        <th>
+            {{ 'Weight'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}
+        </th>
+        <th>
+            {{ 'Active'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for product in products %}
+        <tr>
+            <td>
+                <input type="checkbox" class="bulk-item" :value="{{ product.id_product }}"
+                       :checked="selectedProducts.includes({{ product.id_product }})"
+                       @change="toggleItem('products', $event)">
+            </td>
+            <td>{{ product.id_product }}</td>
+            <td>{{ product.name }}</td>
+            <td>{{ product.reference }}</td>
+            <td>{{ product.supplier_reference }}</td>
+            <td>{{ product.id_category_default }}</td>
+            <td>{{ product.weight }}</td>
+            <td>
+                {% if product.active %}
+                    <span class="badge badge-success">{{ 'Yes'|trans({}, 'Admin.Global') }}</span>
+                {% else %}
+                    <span class="badge badge-danger">{{ 'No'|trans({}, 'Admin.Global') }}</span>
+                {% endif %}
+            </td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="8" class="text-center">
+                {{ 'No products found.'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+{% include '@Modules/drsoftfrcarrierproductbulk/src/UI/Admin/View/partial/_pagination.html.twig' with { 'current': product_current_page, 'total': product_total_pages, 'limit': product_limit, 'route': 'admin_drsoft_fr_carrier_product_bulk_product_list', 'list_elm_id': 'products-list', 'form_elm_id': 'product-filters', 'filter_data': product_filter_data } %}

@@ -1,0 +1,16 @@
+{% extends '@PrestaShop/Admin/layout.html.twig' %}
+
+{% trans_default_domain "Modules.Drsoftfrcarrierproductbulk.Admin" %}
+
+{% block content %}
+    {{ block('main') }}
+{% endblock %}
+
+{% block content_footer %}
+    {% include '@Modules/drsoftfrcarrierproductbulk/src/UI/Admin/View/partial/_footer.html.twig' %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
+

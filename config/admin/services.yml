@@ -1,0 +1,145 @@
+services:
+  drsoft_fr.module.carrier_product_bulk.module:
+    class: drsoftfrcarrierproductbulk
+    public: true
+
+  DrSoftFr\Module\CarrierProductBulk\UI\Admin\Controller\CarrierProductBulkController:
+    arguments:
+      $module: '@drsoft_fr.module.carrier_product_bulk.module'
+      $addHandler: '@drsoft_fr.module.carrier_product_bulk.application.command_handler.add_carriers_to_products_handler'
+      $removeHandler: '@drsoft_fr.module.carrier_product_bulk.application.command_handler.remove_carriers_from_products_handler'
+      $getCarriersHandler: '@drsoft_fr.module.carrier_product_bulk.application.query_handler.get_carriers_handler'
+      $getCategoriesHandler: '@drsoft_fr.module.carrier_product_bulk.application.query_handler.get_categories_handler'
+      $getManufacturersHandler: '@drsoft_fr.module.carrier_product_bulk.application.query_handler.get_manufacturers_handler'
+      $getProductsHandler: '@drsoft_fr.module.carrier_product_bulk.application.query_handler.get_products_handler'
+      $getSuppliersHandler: '@drsoft_fr.module.carrier_product_bulk.application.query_handler.get_suppliers_handler'
+      $countCarriersHandler: '@drsoft_fr.module.carrier_product_bulk.application.query_handler.count_carriers_handler'
+      $countProductsHandler: '@drsoft_fr.module.carrier_product_bulk.application.query_handler.count_products_handler'
+    tags: [ 'controller.service_arguments' ]
+
+  drsoft_fr.module.carrier_product_bulk.infrastructure.persistence.doctrine.carrier_repository:
+    class: DrSoftFr\Module\CarrierProductBulk\Infrastructure\Persistence\Doctrine\CarrierRepository
+    arguments:
+      - '@doctrine.dbal.default_connection'
+      - '@=service("prestashop.adapter.legacy.context").getContext().shop.id'
+      - '%database_prefix%'
+
+  drsoft_fr.module.carrier_product_bulk.prestashop.repository.category_repository:
+    class: PrestaShopBundle\Entity\Repository\CategoryRepository
+    arguments:
+      - "@doctrine.dbal.default_connection"
+      - "@prestashop.adapter.legacy.context"
+      - "%database_prefix%"
+
+  drsoft_fr.module.carrier_product_bulk.infrastructure.persistence.doctrine.category_repository:
+    class: DrSoftFr\Module\CarrierProductBulk\Infrastructure\Persistence\Doctrine\CategoryRepository
+    arguments:
+      $repository: '@drsoft_fr.module.carrier_product_bulk.prestashop.repository.category_repository'
+
+  DrSoftFr\Module\CarrierProductBulk\Domain\Repository\CategoryRepositoryInterface:
+    alias: drsoft_fr.module.carrier_product_bulk.infrastructure.persistence.doctrine.category_repository
+
+  drsoft_fr.module.carrier_product_bulk.infrastructure.persistence.doctrine.product_carrier_repository:
+    class: DrSoftFr\Module\CarrierProductBulk\Infrastructure\Persistence\Doctrine\ProductCarrierRepository
+    arguments:
+      - '@doctrine.dbal.default_connection'
+      - '@=service("prestashop.adapter.legacy.context").getContext().shop.id'
+      - '%database_prefix%'
+
+  drsoft_fr.module.carrier_product_bulk.infrastructure.persistence.doctrine.product_repository:
+    class: DrSoftFr\Module\CarrierProductBulk\Infrastructure\Persistence\Doctrine\ProductRepository
+    arguments:
+      - '@doctrine.dbal.default_connection'
+      - '@=service("prestashop.adapter.legacy.context").getContext().language.id'
+      - '@=service("prestashop.adapter.legacy.context").getContext().shop.id'
+      - '%database_prefix%'
+
+  drsoft_fr.module.carrier_product_bulk.prestashop.repository.manufacturer_repository:
+    class: PrestaShopBundle\Entity\Repository\ManufacturerRepository
+    arguments:
+      - "@doctrine.dbal.default_connection"
+      - "@prestashop.adapter.legacy.context"
+      - "%database_prefix%"
+
+  drsoft_fr.module.carrier_product_bulk.infrastructure.persistence.doctrine.manufacturer_repository:
+    class: DrSoftFr\Module\CarrierProductBulk\Infrastructure\Persistence\Doctrine\ManufacturerRepository
+    arguments:
+      $repository: '@drsoft_fr.module.carrier_product_bulk.prestashop.repository.manufacturer_repository'
+
+  DrSoftFr\Module\CarrierProductBulk\Domain\Repository\ManufacturerRepositoryInterface:
+    alias: drsoft_fr.module.carrier_product_bulk.infrastructure.persistence.doctrine.manufacturer_repository
+
+  drsoft_fr.module.carrier_product_bulk.prestashop.repository.supplier_repository:
+    class: PrestaShopBundle\Entity\Repository\SupplierRepository
+    arguments:
+      - "@doctrine.dbal.default_connection"
+      - "@prestashop.adapter.legacy.context"
+      - "%database_prefix%"
+
+  drsoft_fr.module.carrier_product_bulk.infrastructure.persistence.doctrine.supplier_repository:
+    class: DrSoftFr\Module\CarrierProductBulk\Infrastructure\Persistence\Doctrine\SupplierRepository
+    arguments:
+      $repository: '@drsoft_fr.module.carrier_product_bulk.prestashop.repository.supplier_repository'
+
+  DrSoftFr\Module\CarrierProductBulk\Domain\Repository\SupplierRepositoryInterface:
+    alias: drsoft_fr.module.carrier_product_bulk.infrastructure.persistence.doctrine.supplier_repository
+
+  drsoft_fr.module.carrier_product_bulk.domain.service.carrier_product_service:
+    class: DrSoftFr\Module\CarrierProductBulk\Domain\Service\CarrierProductService
+    arguments:
+      - '@drsoft_fr.module.carrier_product_bulk.infrastructure.persistence.doctrine.product_carrier_repository'
+    public: true
+
+  drsoft_fr.module.carrier_product_bulk.application.command_handler.add_carriers_to_products_handler:
+    class: DrSoftFr\Module\CarrierProductBulk\Application\CommandHandler\AddCarriersToProductsHandler
+    arguments:
+      - '@drsoft_fr.module.carrier_product_bulk.domain.service.carrier_product_service'
+    public: true
+
+  drsoft_fr.module.carrier_product_bulk.application.command_handler.remove_carriers_from_products_handler:
+    class: DrSoftFr\Module\CarrierProductBulk\Application\CommandHandler\RemoveCarriersFromProductsHandler
+    arguments:
+      - '@drsoft_fr.module.carrier_product_bulk.domain.service.carrier_product_service'
+    public: true
+
+  drsoft_fr.module.carrier_product_bulk.application.query_handler.count_carriers_handler:
+    class: DrSoftFr\Module\CarrierProductBulk\Application\QueryHandler\CountCarriersHandler
+    arguments:
+      - '@drsoft_fr.module.carrier_product_bulk.infrastructure.persistence.doctrine.carrier_repository'
+    public: true
+
+  drsoft_fr.module.carrier_product_bulk.application.query_handler.count_products_handler:
+    class: DrSoftFr\Module\CarrierProductBulk\Application\QueryHandler\CountProductsHandler
+    arguments:
+      - '@drsoft_fr.module.carrier_product_bulk.infrastructure.persistence.doctrine.product_repository'
+    public: true
+
+  drsoft_fr.module.carrier_product_bulk.application.query_handler.get_carriers_handler:
+    class: DrSoftFr\Module\CarrierProductBulk\Application\QueryHandler\GetCarriersHandler
+    arguments:
+      - '@drsoft_fr.module.carrier_product_bulk.infrastructure.persistence.doctrine.carrier_repository'
+    public: true
+
+  drsoft_fr.module.carrier_product_bulk.application.query_handler.get_products_handler:
+    class: DrSoftFr\Module\CarrierProductBulk\Application\QueryHandler\GetProductsHandler
+    arguments:
+      - '@drsoft_fr.module.carrier_product_bulk.infrastructure.persistence.doctrine.product_repository'
+    public: true
+
+  drsoft_fr.module.carrier_product_bulk.application.query_handler.get_categories_handler:
+    class: DrSoftFr\Module\CarrierProductBulk\Application\QueryHandler\GetCategoriesHandler
+    arguments:
+      - '@DrSoftFr\Module\CarrierProductBulk\Domain\Repository\CategoryRepositoryInterface'
+    public: true
+
+  drsoft_fr.module.carrier_product_bulk.application.query_handler.get_manufacturers_handler:
+    class: DrSoftFr\Module\CarrierProductBulk\Application\QueryHandler\GetManufacturersHandler
+    arguments:
+      - '@DrSoftFr\Module\CarrierProductBulk\Domain\Repository\ManufacturerRepositoryInterface'
+    public: true
+
+  drsoft_fr.module.carrier_product_bulk.application.query_handler.get_suppliers_handler:
+    class: DrSoftFr\Module\CarrierProductBulk\Application\QueryHandler\GetSuppliersHandler
+    arguments:
+      - '@DrSoftFr\Module\CarrierProductBulk\Domain\Repository\SupplierRepositoryInterface'
+    public: true

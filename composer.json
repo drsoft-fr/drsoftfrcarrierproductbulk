@@ -13,7 +13,9 @@
     "psr-4": {
       "DrSoftFr\\Module\\CarrierProductBulk\\": "src/"
     },
-    "classmap": [],
+    "classmap": [
+      "drsoftfrcarrierproductbulk.php"
+    ],
     "exclude-from-classmap": []
   },
   "config": {
