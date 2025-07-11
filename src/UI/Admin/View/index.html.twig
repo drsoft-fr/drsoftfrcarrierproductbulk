@@ -5,6 +5,9 @@
          x-init="initSelections()"
          class="carrier-product-bulk-wrapper card">
         <div class="card-body">
+            <div x-show="loading" x-transition.opacity class="loader-overlay">
+                <div class="loader-spinner"></div>
+            </div>
             <h1>Carrier Product Bulk</h1>
             <template x-if="message">
                 <div class="alert" :class="type ? 'alert-' + type : 'alert-success'" x-text="message" x-show="message"
@@ -42,6 +45,43 @@
     </div>
 {% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+
+    <style>
+        .loader-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .loader-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid var(--light);
+            border-top: 5px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+{% endblock %}
+
 {% block javascripts %}
     {{ parent() }}
 
@@ -51,6 +91,7 @@
     <script>
       document.addEventListener('alpine:init', () => {
         Alpine.data('carrierProductBulk', () => ({
+          loading: false,
           selectedCarriers: [],
           selectedProducts: [],
           message: '',
@@ -59,6 +100,9 @@
           initSelections() {
             this.syncSelections('carriers')
             this.syncSelections('products')
+            document.body.addEventListener('htmx:beforeRequest', () => this.loading = true)
+            document.body.addEventListener('htmx:afterOnLoad', () => this.loading = false)
+            document.body.addEventListener('htmx:sendError', () => this.loading = false)
           },
 
           toggleItem(type, event) {
@@ -97,9 +141,11 @@
           },
 
           submitAction(action) {
+            this.loading = true
             if (this.selectedCarriers.length === 0 || this.selectedProducts.length === 0) {
               this.message = '{{ 'Incomplete selection.'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Error') }}'
               this.type = 'danger'
+              this.loading = false
               return
             }
             fetch('{{ path('admin_drsoft_fr_carrier_product_bulk_ajax') }}', {
@@ -115,10 +161,17 @@
               .then(data => {
                 this.message = data.message
                 this.type = data.type
+                this.loading = false
                 setTimeout(() => {
                   this.message = ''
                   this.type = ''
                 }, 4000)
+              })
+              .catch(error => {
+                console.error('Error during action: ' + action, error)
+                this.message = '{{ 'An error occurred during the operation.'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Error') }}'
+                this.type = 'danger'
+                this.loading = false
               })
           },
 
