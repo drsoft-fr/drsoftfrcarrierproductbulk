@@ -25,13 +25,17 @@
                 {% include '@Modules/drsoftfrcarrierproductbulk/src/UI/Admin/View/partial/_product_list.html.twig' %}
             </div>
             <div class="card-actions">
-                <div class="mt-4">
-                    <button @click="submitAction('add')" class="btn btn-success">
-                        {{ '✅ Add carriers to products'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Actions') }}
-                    </button>
-                    <button @click="submitAction('remove')" class="btn btn-danger">
-                        {{ '❌ Remove carriers from products'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Actions') }}
-                    </button>
+                <div class="mt-4 row">
+                    <div class="col-12 col-md-6">
+                        <button @click="submitAction('add')" class="btn btn-success w-100">
+                            {{ '✅ Add carriers to products'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Actions') }}
+                        </button>
+                    </div>
+                    <div class="col-12 col-md-6 mt-3 mt-md-0">
+                        <button @click="submitAction('remove')" class="btn btn-danger w-100">
+                            {{ '❌ Remove carriers from products'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Actions') }}
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

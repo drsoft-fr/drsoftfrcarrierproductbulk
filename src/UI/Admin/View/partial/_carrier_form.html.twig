@@ -3,58 +3,71 @@
       hx-target="#carriers-list"
       hx-swap="innerHTML"
       class="mb-3 p-3 border">
-    <h4>{{ 'Carrier filters'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}</h4>
-    <div class="row">
-        <div class="col-md-3">
-            <label class="form-control-label"
-                   for="carrier-filters__id-reference">{{ 'ID'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}</label>
-            <input id="carrier-filters__id-reference" type="number" name="idReference" class="form-control mb-2"
-                   placeholder="{{ 'ID'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}">
+    <h4>
+        <a class="btn btn-link" data-toggle="collapse" href="#carrier-filters-collapse" role="button"
+           aria-expanded="false" aria-controls="carrier-filters-collapse">
+            {{ 'Carrier filters'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}
+        </a>
+    </h4>
+    <div id="carrier-filters-collapse" class="collapse">
+        <div class="row">
+            <div class="col-md-3 mt-2">
+                <label class="form-control-label"
+                       for="carrier-filters__id-reference">{{ 'ID'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}</label>
+                <input id="carrier-filters__id-reference" type="number" name="idReference" class="form-control mb-2"
+                       placeholder="{{ 'ID'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}">
+            </div>
+            <div class="col-md-3 mt-2">
+                <label class="form-control-label"
+                       for="carrier-filters__name">{{ 'Name'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}</label>
+                <input id="carrier-filters__name" type="text" name="name" class="form-control mb-2"
+                       placeholder="{{ 'Name'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}">
+            </div>
+            <div class="col-md-2 mt-2">
+                <label for="carrier-filters__id-free"
+                       class="form-control-label">{{ 'Free delivery'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}</label>
+                <select id="carrier-filters__id-free" name="isFree" class="form-control mb-2">
+                    <option value="">--</option>
+                    <option value="1">{{ 'Yes'|trans({}, 'Admin.Global') }}</option>
+                    <option value="0">{{ 'No'|trans({}, 'Admin.Global') }}</option>
+                </select>
+            </div>
+            <div class="col-md-2 mt-2">
+                <label for="carrier-filters__active"
+                       class="form-control-label">{{ 'Active'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}</label>
+                <select id="carrier-filters__active" name="active" class="form-control mb-2">
+                    <option value="">--</option>
+                    <option value="1">{{ 'Yes'|trans({}, 'Admin.Global') }}</option>
+                    <option value="0">{{ 'No'|trans({}, 'Admin.Global') }}</option>
+                </select>
+            </div>
+            <div class="col-md-2 mt-2">
+                <label for="carrier-filters__deleted"
+                       class="form-control-label">{{ 'Deleted'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}</label>
+                <select id="carrier-filters__deleted" name="deleted" class="form-control mb-2">
+                    <option value="">--</option>
+                    <option value="1">{{ 'Yes'|trans({}, 'Admin.Global') }}</option>
+                    <option value="0">{{ 'No'|trans({}, 'Admin.Global') }}</option>
+                </select>
+            </div>
         </div>
-        <div class="col-md-3">
-            <label class="form-control-label"
-                   for="carrier-filters__name">{{ 'Name'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}</label>
-            <input id="carrier-filters__name" type="text" name="name" class="form-control mb-2"
-                   placeholder="{{ 'Name'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}">
-        </div>
-        <div class="col-md-2">
-            <label for="carrier-filters__id-free"
-                   class="form-control-label">{{ 'Free delivery'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}</label>
-            <select id="carrier-filters__id-free" name="isFree" class="form-control mb-2">
-                <option value="">--</option>
-                <option value="1">{{ 'Yes'|trans({}, 'Admin.Global') }}</option>
-                <option value="0">{{ 'No'|trans({}, 'Admin.Global') }}</option>
-            </select>
-        </div>
-        <div class="col-md-2">
-            <label for="carrier-filters__active"
-                   class="form-control-label">{{ 'Active'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}</label>
-            <select id="carrier-filters__active" name="active" class="form-control mb-2">
-                <option value="">--</option>
-                <option value="1">{{ 'Yes'|trans({}, 'Admin.Global') }}</option>
-                <option value="0">{{ 'No'|trans({}, 'Admin.Global') }}</option>
-            </select>
-        </div>
-        <div class="col-md-2">
-            <label for="carrier-filters__deleted"
-                   class="form-control-label">{{ 'Deleted'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}</label>
-            <select id="carrier-filters__deleted" name="deleted" class="form-control mb-2">
-                <option value="">--</option>
-                <option value="1">{{ 'Yes'|trans({}, 'Admin.Global') }}</option>
-                <option value="0">{{ 'No'|trans({}, 'Admin.Global') }}</option>
-            </select>
-        </div>
-    </div>
-    <button type="submit"
-            class="btn btn-primary">{{ 'Search Carriers'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Actions') }}</button>
-    <button type="button"
-            class="btn btn-default"
-            @click="
+        <div class="mt-3 row">
+            <div class="col-12 col-md-6">
+                <button type="submit"
+                        class="btn btn-primary w-100">{{ 'Search Carriers'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Actions') }}</button>
+            </div>
+            <div class="col-12 col-md-6 mt-3 mt-md-0">
+                <button type="button"
+                        class="btn btn-default w-100"
+                        @click="
       $el.closest('form').reset();
       $el.closest('form').dispatchEvent(new Event('submit', { bubbles: true }))
     ">
-        {{ 'Reset'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Actions') }}
-    </button>
+                    {{ 'Reset'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Actions') }}
+                </button>
+            </div>
+        </div>
+    </div>
     <input type="hidden" name="page" value="{{ carrier_current_page|default(1) }}">
     <input type="hidden" name="limit" value="{{ carrier_limit|default(20) }}">
 </form>

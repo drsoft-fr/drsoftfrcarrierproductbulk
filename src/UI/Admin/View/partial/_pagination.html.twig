@@ -1,7 +1,7 @@
 <nav class="row my-3">
-    <div class="col-10">
+    <div class="col-12 col-md-8">
         {% if total > 1 %}
-            <ul class="pagination">
+            <ul class="pagination justify-content-center justify-content-md-start pagination">
                 {% if current > 1 %}
                     <li class="page-item">
                         <a href="{{ path(route, filter_data|merge({'page': 1})) }}"
@@ -54,7 +54,7 @@
             </ul>
         {% endif %}
     </div>
-    <div class="col-2">
+    <div class="col-12 col-md-4">
         <div class="row align-items-center">
             <div class="col-6 text-right">
                 <label for="{{ form_elm_id }}--limit"
@@ -63,8 +63,6 @@
             <div class="col-6">
                 <select name="limit" id="{{ form_elm_id }}--limit" class="form-control"
                         @change="updateLimitAndSubmit($el.value, 1, '{{ form_elm_id }}');">
-                    <option value="2" {% if limit == 2 %}selected{% endif %}>2</option>
-                    <option value="5" {% if limit == 5 %}selected{% endif %}>5</option>
                     <option value="10" {% if limit == 10 %}selected{% endif %}>10</option>
                     <option value="20" {% if limit == 20 %}selected{% endif %}>20</option>
                     <option value="50" {% if limit == 50 %}selected{% endif %}>50</option>
