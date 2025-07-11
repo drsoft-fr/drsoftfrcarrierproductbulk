@@ -19,6 +19,7 @@
             <div id="carriers-list">
                 {% include '@Modules/drsoftfrcarrierproductbulk/src/UI/Admin/View/partial/_carrier_list.html.twig' %}
             </div>
+            <hr>
             {% include '@Modules/drsoftfrcarrierproductbulk/src/UI/Admin/View/partial/_product_form.html.twig' %}
             <div id="products-list">
                 {% include '@Modules/drsoftfrcarrierproductbulk/src/UI/Admin/View/partial/_product_list.html.twig' %}
@@ -115,6 +116,56 @@
                   this.type = ''
                 }, 4000)
               })
+          },
+
+          submitForm(id) {
+            /** @type {HTMLFormElement} */
+            const formElm = document.getElementById(id)
+
+            if (!formElm) {
+              this.message = `#${id} form filter not found`
+              this.type = 'danger'
+              setTimeout(() => {
+                this.message = ''
+                this.type = ''
+              }, 4000)
+
+              return
+            }
+
+            formElm.dispatchEvent(new Event('submit', { bubbles: true }))
+          },
+
+          updateLimitAndSubmit(limit, page, id) {
+            const pageInputElm = document.querySelector(`#${id} [name=page]`)
+            const limitInputElm = document.querySelector(`#${id} [name=limit]`)
+
+            if (!pageInputElm) {
+              this.message = `#${id} input page not found`
+              this.type = 'danger'
+              setTimeout(() => {
+                this.message = ''
+                this.type = ''
+              }, 4000)
+
+              return
+            }
+
+            if (!limitInputElm) {
+              this.message = `#${id} input limit not found`
+              this.type = 'danger'
+              setTimeout(() => {
+                this.message = ''
+                this.type = ''
+              }, 4000)
+
+              return
+            }
+
+            pageInputElm.value = page
+            limitInputElm.value = limit
+
+            this.submitForm(id)
           }
         }))
       })

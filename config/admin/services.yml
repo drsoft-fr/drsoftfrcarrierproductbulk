@@ -13,6 +13,8 @@ services:
       $getManufacturersHandler: '@drsoft_fr.module.carrier_product_bulk.application.query_handler.get_manufacturers_handler'
       $getProductsHandler: '@drsoft_fr.module.carrier_product_bulk.application.query_handler.get_products_handler'
       $getSuppliersHandler: '@drsoft_fr.module.carrier_product_bulk.application.query_handler.get_suppliers_handler'
+      $countCarriersHandler: '@drsoft_fr.module.carrier_product_bulk.application.query_handler.count_carriers_handler'
+      $countProductsHandler: '@drsoft_fr.module.carrier_product_bulk.application.query_handler.count_products_handler'
     tags: [ 'controller.service_arguments' ]
 
   drsoft_fr.module.carrier_product_bulk.infrastructure.persistence.doctrine.carrier_repository:

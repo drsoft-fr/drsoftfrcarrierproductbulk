@@ -55,4 +55,6 @@
     ">
         {{ 'Reset'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Actions') }}
     </button>
+    <input type="hidden" name="page" value="{{ carrier_current_page|default(1) }}">
+    <input type="hidden" name="limit" value="{{ carrier_limit|default(20) }}">
 </form>

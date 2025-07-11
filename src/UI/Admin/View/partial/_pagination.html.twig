@@ -1,0 +1,76 @@
+<nav class="row my-3">
+    <div class="col-10">
+        {% if total > 1 %}
+            <ul class="pagination">
+                {% if current > 1 %}
+                    <li class="page-item">
+                        <a href="{{ path(route, filter_data|merge({'page': 1})) }}"
+                           hx-get="{{ path(route, filter_data|merge({'page': 1})) }}"
+                           hx-target="#{{ list_elm_id }}"
+                           hx-swap="innerHTML"
+                           class="page-link">
+                            1
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="page-item active">
+                        <span class="page-link">1</span>
+                    </li>
+                {% endif %}
+                {% if current > 4 %}
+                    <li class="page-item disabled"><span class="page-link">…</span></li>
+                {% endif %}
+                {% for page in (current - 2)..(current + 2) %}
+                    {% if page > 1 and page < total %}
+                        <li class="page-item {% if page == current %}active{% endif %}">
+                            <a href="{{ path(route, filter_data|merge({'page': page})) }}"
+                               class="page-link"
+                               hx-get="{{ path(route, filter_data|merge({'page': page})) }}"
+                               hx-target="#{{ list_elm_id }}"
+                               hx-swap="innerHTML">
+                                {{ page }}
+                            </a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+                {% if current < total - 3 %}
+                    <li class="page-item disabled"><span class="page-link">…</span></li>
+                {% endif %}
+                {% if total > 1 and current != total %}
+                    <li class="page-item">
+                        <a href="{{ path(route, filter_data|merge({'page': total})) }}"
+                           hx-get="{{ path(route, filter_data|merge({'page': total})) }}"
+                           hx-target="#{{ list_elm_id }}"
+                           hx-swap="innerHTML"
+                           class="page-link">
+                            {{ total }}
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="page-item active">
+                        <span class="page-link">{{ total }}</span>
+                    </li>
+                {% endif %}
+            </ul>
+        {% endif %}
+    </div>
+    <div class="col-2">
+        <div class="row align-items-center">
+            <div class="col-6 text-right">
+                <label for="{{ form_elm_id }}--limit"
+                       class="form-control-label">{{ 'Number per page'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}</label>
+            </div>
+            <div class="col-6">
+                <select name="limit" id="{{ form_elm_id }}--limit" class="form-control"
+                        @change="updateLimitAndSubmit($el.value, 1, '{{ form_elm_id }}');">
+                    <option value="2" {% if limit == 2 %}selected{% endif %}>2</option>
+                    <option value="5" {% if limit == 5 %}selected{% endif %}>5</option>
+                    <option value="10" {% if limit == 10 %}selected{% endif %}>10</option>
+                    <option value="20" {% if limit == 20 %}selected{% endif %}>20</option>
+                    <option value="50" {% if limit == 50 %}selected{% endif %}>50</option>
+                    <option value="100" {% if limit == 100 %}selected{% endif %}>100</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</nav>

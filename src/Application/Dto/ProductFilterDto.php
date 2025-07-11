@@ -5,6 +5,8 @@ namespace DrSoftFr\Module\CarrierProductBulk\Application\Dto;
 final class ProductFilterDto
 {
     private const MIN_VALID_ID = 1;
+    private const DEFAULT_LIMIT = 20;
+    private const DEFAULT_PAGE = 1;
 
     public ?int $idProduct = null;
     public ?string $name = null;
@@ -17,8 +19,9 @@ final class ProductFilterDto
     public ?float $weightMin = null;
     public ?float $weightMax = null;
     public ?bool $active = null;
-    public ?int $limit = null;
-    public ?int $offset = null;
+    public int $page = 1;
+    public int $limit = 20;
+    public int $offset = 0;
 
     public function __construct(array $data)
     {
@@ -33,8 +36,45 @@ final class ProductFilterDto
         $this->weightMin = $this->initializeFloatValue($data, 'weightMin');
         $this->weightMax = $this->initializeFloatValue($data, 'weightMax');
         $this->active = $this->initializeBoolValue($data, 'active');
-        $this->limit = $this->initializeIntValue($data, 'limit');
-        $this->offset = $this->initializeIntValue($data, 'offset');
+        $this->page = $this->initializePageOrLimitValue($data, 'page', self::DEFAULT_PAGE);
+        $this->limit = $this->initializePageOrLimitValue($data, 'limit', self::DEFAULT_LIMIT);
+        $this->offset = $this->initializeOffsetValue($data, 'offset') ?? 0;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'idProduct' => $this->idProduct,
+            'name' => $this->name,
+            'reference' => $this->reference,
+            'supplierReference' => $this->supplierReference,
+            'idCategoryDefault' => $this->idCategoryDefault,
+            'idCategory' => $this->idCategory,
+            'idSupplier' => $this->idSupplier,
+            'idManufacturer' => $this->idManufacturer,
+            'weightMin' => $this->weightMin,
+            'weightMax' => $this->weightMax,
+            'active' => $this->active,
+            'page' => $this->page,
+            'limit' => $this->limit,
+            'offset' => $this->offset,
+        ];
+    }
+
+    /**
+     * Initializes the page or limit value based on the provided data and a default value.
+     */
+    private function initializePageOrLimitValue(array $data, string $key, int $default): ?int
+    {
+        return false === empty($data[$key]) ? max(1, (int)$data[$key]) : $default;
+    }
+
+    /**
+     * Initializes the offset value based on the current page and limit settings.
+     */
+    private function initializeOffsetValue(array $data, string $key): ?int
+    {
+        return ($this->page - 1) * $this->limit;
     }
 
     /**

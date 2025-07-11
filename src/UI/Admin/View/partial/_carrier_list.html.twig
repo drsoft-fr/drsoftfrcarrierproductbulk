@@ -60,3 +60,5 @@
     {% endfor %}
     </tbody>
 </table>
+
+{% include '@Modules/drsoftfrcarrierproductbulk/src/UI/Admin/View/partial/_pagination.html.twig' with { 'current': carrier_current_page, 'total': carrier_total_pages, 'limit': carrier_limit, 'route': 'admin_drsoft_fr_carrier_product_bulk_carrier_list', 'list_elm_id': 'carriers-list', 'form_elm_id': 'carrier-filters', 'filter_data': carrier_filter_data } %}
