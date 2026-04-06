@@ -19,9 +19,9 @@
             </div>
             <div class="col-md-3 mt-2">
                 <label class="form-control-label"
-                       for="carrier-filters__name">{{ 'Name'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}</label>
+                       for="carrier-filters__name">{{ 'Name'|trans({}, 'Admin.Global') }}</label>
                 <input id="carrier-filters__name" type="text" name="name" class="form-control mb-2"
-                       placeholder="{{ 'Name'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}">
+                       placeholder="{{ 'Name'|trans({}, 'Admin.Global') }}">
             </div>
             <div class="col-md-2 mt-2">
                 <label for="carrier-filters__id-free"
@@ -34,7 +34,7 @@
             </div>
             <div class="col-md-2 mt-2">
                 <label for="carrier-filters__active"
-                       class="form-control-label">{{ 'Active'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}</label>
+                       class="form-control-label">{{ 'Active'|trans({}, 'Admin.Global') }}</label>
                 <select id="carrier-filters__active" name="active" class="form-control mb-2">
                     <option value="">--</option>
                     <option value="1">{{ 'Yes'|trans({}, 'Admin.Global') }}</option>
@@ -63,7 +63,7 @@
       $el.closest('form').reset();
       $el.closest('form').dispatchEvent(new Event('submit', { bubbles: true }))
     ">
-                    {{ 'Reset'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Actions') }}
+                    {{ 'Reset'|trans({}, 'Admin.Actions') }}
                 </button>
             </div>
         </div>

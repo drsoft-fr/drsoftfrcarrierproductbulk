@@ -19,15 +19,15 @@
             </div>
             <div class="col-md-2 mt-2">
                 <label class="form-control-label"
-                       for="product-filters__name">{{ 'Name'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}</label>
+                       for="product-filters__name">{{ 'Name'|trans({}, 'Admin.Global') }}</label>
                 <input id="product-filters__name" type="text" name="name" class="form-control"
-                       placeholder="{{ 'Name'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}">
+                       placeholder="{{ 'Name'|trans({}, 'Admin.Global') }}">
             </div>
             <div class="col-md-2 mt-2">
                 <label class="form-control-label"
-                       for="product-filters__reference">{{ 'Reference'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}</label>
+                       for="product-filters__reference">{{ 'Reference'|trans({}, 'Admin.Global') }}</label>
                 <input id="product-filters__reference" type="text" name="reference" class="form-control"
-                       placeholder="{{ 'Reference'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}">
+                       placeholder="{{ 'Reference'|trans({}, 'Admin.Global') }}">
             </div>
             <div class="col-md-2 mt-2">
                 <label class="form-control-label"
@@ -109,7 +109,7 @@
             </div>
             <div class="col-md-2 mt-2">
                 <label for="product-filters__supplier"
-                       class="form-control-label">{{ 'Supplier'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}</label>
+                       class="form-control-label">{{ 'Supplier'|trans({}, 'Admin.Global') }}</label>
                 <select id="product-filters__supplier" name="idSupplier[]" class="form-control" multiple
                         aria-multiselectable="true">
                     <option value="">{{ 'No supplier selected'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}</option>
@@ -131,7 +131,7 @@
             </div>
             <div class="col-md-2 mt-2">
                 <label for="product-filters__active"
-                       class="form-control-label">{{ 'Active'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}</label>
+                       class="form-control-label">{{ 'Active'|trans({}, 'Admin.Global') }}</label>
                 <select id="product-filters__active" name="active" class="form-control">
                     <option value="">--</option>
                     <option value="1">{{ 'Yes'|trans({}, 'Admin.Global') }}</option>
@@ -183,7 +183,7 @@
       $el.closest('form').reset();
       $el.closest('form').dispatchEvent(new Event('submit', { bubbles: true }))
     ">
-                    {{ 'Reset'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Actions') }}
+                    {{ 'Reset'|trans({}, 'Admin.Actions') }}
                 </button>
             </div>
         </div>
