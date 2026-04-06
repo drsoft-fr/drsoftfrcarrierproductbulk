@@ -23,6 +23,9 @@
         <th>
             {{ 'Active'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}
         </th>
+        <th>
+            {{ 'Carriers'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}
+        </th>
     </tr>
     </thead>
     <tbody>
@@ -46,10 +49,17 @@
                     <span class="badge badge-danger">{{ 'No'|trans({}, 'Admin.Global') }}</span>
                 {% endif %}
             </td>
+            <td>
+                {% if product.carrier_names %}
+                    {{ product.carrier_names }}
+                {% else %}
+                    <span class="badge badge-success">{{ 'All'|trans({}, 'Admin.Global') }}</span>
+                {% endif %}
+            </td>
         </tr>
     {% else %}
         <tr>
-            <td colspan="8" class="text-center">
+            <td colspan="9" class="text-center">
                 {{ 'No products found.'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}
             </td>
         </tr>

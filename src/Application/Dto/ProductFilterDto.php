@@ -19,6 +19,8 @@ final class ProductFilterDto
     public ?float $weightMin = null;
     public ?float $weightMax = null;
     public ?bool $active = null;
+    public ?array $idCarrier = [];
+    public ?string $carrierAssociation = null;
     public int $page = 1;
     public int $limit = 20;
     public int $offset = 0;
@@ -36,6 +38,8 @@ final class ProductFilterDto
         $this->weightMin = $this->initializeFloatValue($data, 'weightMin');
         $this->weightMax = $this->initializeFloatValue($data, 'weightMax');
         $this->active = $this->initializeBoolValue($data, 'active');
+        $this->idCarrier = $this->hydrateArrayId($data['idCarrier'] ?? []);
+        $this->carrierAssociation = $this->initializeCarrierAssociationValue($data);
         $this->page = $this->initializePageOrLimitValue($data, 'page', self::DEFAULT_PAGE);
         $this->limit = $this->initializePageOrLimitValue($data, 'limit', self::DEFAULT_LIMIT);
         $this->offset = $this->initializeOffsetValue() ?? 0;
@@ -55,6 +59,8 @@ final class ProductFilterDto
             'weightMin' => $this->weightMin,
             'weightMax' => $this->weightMax,
             'active' => $this->active,
+            'idCarrier' => $this->idCarrier,
+            'carrierAssociation' => $this->carrierAssociation,
             'page' => $this->page,
             'limit' => $this->limit,
             'offset' => $this->offset,
@@ -139,5 +145,15 @@ final class ProductFilterDto
     private function initializeBoolValue(array $data, string $key): ?bool
     {
         return isset($data[$key]) && "" !== $data[$key] ? (bool)$data[$key] : null;
+    }
+
+    /**
+     * Initializes the carrier association filter: 'with' or 'without'.
+     */
+    private function initializeCarrierAssociationValue(array $data): ?string
+    {
+        $value = $data['carrierAssociation'] ?? null;
+
+        return in_array($value, ['with', 'without'], true) ? $value : null;
     }
 }

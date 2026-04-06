@@ -103,6 +103,52 @@
                 </select>
             </div>
         </div>
+        <hr class="m-3 mt-4">
+        <div>
+            <h5>{{ 'Carrier filters'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}</h5>
+        </div>
+        <div class="row mb-2">
+            <div class="col-md-6 mt-2">
+                <label for="product-filters__id-carrier"
+                       class="form-control-label">{{ 'Carrier(s)'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}</label>
+                <select id="product-filters__id-carrier" name="idCarrier[]" class="form-control" multiple
+                        aria-multiselectable="true">
+                    <option value="">{{ 'No carrier selected'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}</option>
+                    {% for carrier in carriers %}
+                        <option value="{{ carrier.id_reference }}">
+                            #{{ carrier.id_reference }} - {{ carrier.name }} -
+
+                            {% if carrier.is_free %}
+                                <span class="badge badge-success">{{ 'Free'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}</span>
+                            {% else %}
+                                <span class="badge badge-danger">{{ 'Not free'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}</span>
+                            {% endif %} -
+
+                            {% if carrier.active %}
+                                <span class="badge badge-success">{{ 'Active'|trans({}, 'Admin.Global') }}</span>
+                            {% else %}
+                                <span class="badge badge-danger">{{ 'Inactive'|trans({}, 'Admin.Global') }}</span>
+                            {% endif %} -
+
+                            {% if carrier.deleted %}
+                                <span class="badge badge-danger">{{ 'Deleted'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}</span>
+                            {% else %}
+                                <span class="badge badge-success">{{ 'Not deleted'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}</span>
+                            {% endif %}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-6 mt-2">
+                <label for="product-filters__carrier-association"
+                       class="form-control-label">{{ 'Carrier association'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}</label>
+                <select id="product-filters__carrier-association" name="carrierAssociation" class="form-control">
+                    <option value="">--</option>
+                    <option value="with">{{ 'Associated'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}</option>
+                    <option value="without">{{ 'Not associated'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}</option>
+                </select>
+            </div>
+        </div>
         <div class="mt-3 row">
             <div class="col-12 col-md-6">
                 <button type="submit"

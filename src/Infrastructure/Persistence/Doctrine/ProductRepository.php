@@ -43,6 +43,13 @@ final class ProductRepository
             'p.visibility'
         );
 
+        $qb->addSelect(sprintf(
+            '(SELECT GROUP_CONCAT(c2.name ORDER BY c2.name SEPARATOR \', \') FROM %sproduct_carrier pc2 INNER JOIN %scarrier c2 ON c2.id_reference = pc2.id_carrier_reference AND c2.deleted = 0 WHERE pc2.id_product = p.id_product AND pc2.id_shop = %d) AS carrier_names',
+            $this->tablePrefix,
+            $this->tablePrefix,
+            $this->contextShopId
+        ));
+
         if ($filter->limit !== null) {
             $qb->setMaxResults($filter->limit);
         }
@@ -150,6 +157,25 @@ final class ProductRepository
         if ($filter->active !== null) {
             $qb->andWhere('p.active = :active')
                 ->setParameter('active', $filter->active);
+        }
+
+        if ($filter->carrierAssociation !== null) {
+            $prefix = $this->tablePrefix;
+            $shopId = (int) $this->contextShopId;
+            $inClause = '';
+
+            if (!empty($filter->idCarrier)) {
+                $ids = implode(',', array_map('intval', $filter->idCarrier));
+                $inClause = " AND pc_f.id_carrier_reference IN ({$ids})";
+            }
+
+            $existsSql = "EXISTS (SELECT 1 FROM {$prefix}product_carrier pc_f WHERE pc_f.id_product = p.id_product{$inClause} AND pc_f.id_shop = {$shopId})";
+
+            if ($filter->carrierAssociation === 'without') {
+                $qb->andWhere("NOT {$existsSql}");
+            } else {
+                $qb->andWhere($existsSql);
+            }
         }
 
         return $qb;
