@@ -114,28 +114,14 @@
                 <select id="product-filters__id-carrier" name="idCarrier[]" class="form-control" multiple
                         aria-multiselectable="true">
                     <option value="">{{ 'No carrier selected'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}</option>
+                    {% set seen_carrier_refs = [] %}
                     {% for carrier in carriers %}
-                        <option value="{{ carrier.id_reference }}">
-                            #{{ carrier.id_reference }} - {{ carrier.name }} -
-
-                            {% if carrier.is_free %}
-                                <span class="badge badge-success">{{ 'Free'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}</span>
-                            {% else %}
-                                <span class="badge badge-danger">{{ 'Not free'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}</span>
-                            {% endif %} -
-
-                            {% if carrier.active %}
-                                <span class="badge badge-success">{{ 'Active'|trans({}, 'Admin.Global') }}</span>
-                            {% else %}
-                                <span class="badge badge-danger">{{ 'Inactive'|trans({}, 'Admin.Global') }}</span>
-                            {% endif %} -
-
-                            {% if carrier.deleted %}
-                                <span class="badge badge-danger">{{ 'Deleted'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}</span>
-                            {% else %}
-                                <span class="badge badge-success">{{ 'Not deleted'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}</span>
-                            {% endif %}
-                        </option>
+                        {% if carrier.id_reference not in seen_carrier_refs %}
+                            {% set seen_carrier_refs = seen_carrier_refs|merge([carrier.id_reference]) %}
+                            <option value="{{ carrier.id_reference }}">
+                                #{{ carrier.id_reference }} - {{ carrier.name }}
+                            </option>
+                        {% endif %}
                     {% endfor %}
                 </select>
             </div>
