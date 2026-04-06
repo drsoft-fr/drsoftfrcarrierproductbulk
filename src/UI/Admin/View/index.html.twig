@@ -103,6 +103,10 @@
             document.body.addEventListener('htmx:beforeRequest', () => this.loading = true)
             document.body.addEventListener('htmx:afterOnLoad', () => this.loading = false)
             document.body.addEventListener('htmx:sendError', () => this.loading = false)
+            document.body.addEventListener('htmx:afterSettle', () => {
+              this.syncSelections('carriers')
+              this.syncSelections('products')
+            })
           },
 
           toggleItem(type, event) {
@@ -162,6 +166,9 @@
                 this.message = data.message
                 this.type = data.type
                 this.loading = false
+                if (data.type === 'success') {
+                  this.submitForm('product-filters')
+                }
                 setTimeout(() => {
                   this.message = ''
                   this.type = ''
