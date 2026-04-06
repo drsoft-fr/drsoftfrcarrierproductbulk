@@ -21,6 +21,15 @@
             {{ 'Weight'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}
         </th>
         <th>
+            {{ 'Width'|trans({}, 'Admin.Global') }}
+        </th>
+        <th>
+            {{ 'Height'|trans({}, 'Admin.Global') }}
+        </th>
+        <th>
+            {{ 'Depth'|trans({}, 'Admin.Global') }}
+        </th>
+        <th>
             {{ 'Active'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}
         </th>
         <th>
@@ -42,6 +51,9 @@
             <td>{{ product.supplier_reference }}</td>
             <td>{{ product.id_category_default }}</td>
             <td>{{ product.weight }}</td>
+            <td>{{ product.width }}</td>
+            <td>{{ product.height }}</td>
+            <td>{{ product.depth }}</td>
             <td>
                 {% if product.active %}
                     <span class="badge badge-success">{{ 'Yes'|trans({}, 'Admin.Global') }}</span>
@@ -59,7 +71,7 @@
         </tr>
     {% else %}
         <tr>
-            <td colspan="9" class="text-center">
+            <td colspan="12" class="text-center">
                 {{ 'No products found.'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}
             </td>
         </tr>

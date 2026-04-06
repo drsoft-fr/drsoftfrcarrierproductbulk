@@ -39,6 +39,9 @@ final class ProductRepository
             'p.id_supplier',
             'p.id_manufacturer',
             'p.weight',
+            'p.width',
+            'p.height',
+            'p.depth',
             'p.active',
             'p.visibility'
         );
@@ -152,6 +155,36 @@ final class ProductRepository
         if ($filter->weightMax !== null) {
             $qb->andWhere('p.weight <= :weightMax')
                 ->setParameter('weightMax', $filter->weightMax);
+        }
+
+        if ($filter->widthMin !== null) {
+            $qb->andWhere('p.width >= :widthMin')
+                ->setParameter('widthMin', $filter->widthMin);
+        }
+
+        if ($filter->widthMax !== null) {
+            $qb->andWhere('p.width <= :widthMax')
+                ->setParameter('widthMax', $filter->widthMax);
+        }
+
+        if ($filter->heightMin !== null) {
+            $qb->andWhere('p.height >= :heightMin')
+                ->setParameter('heightMin', $filter->heightMin);
+        }
+
+        if ($filter->heightMax !== null) {
+            $qb->andWhere('p.height <= :heightMax')
+                ->setParameter('heightMax', $filter->heightMax);
+        }
+
+        if ($filter->depthMin !== null) {
+            $qb->andWhere('p.depth >= :depthMin')
+                ->setParameter('depthMin', $filter->depthMin);
+        }
+
+        if ($filter->depthMax !== null) {
+            $qb->andWhere('p.depth <= :depthMax')
+                ->setParameter('depthMax', $filter->depthMax);
         }
 
         if ($filter->active !== null) {
