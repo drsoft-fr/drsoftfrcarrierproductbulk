@@ -88,3 +88,16 @@ Module provided by drSoft.fr and distributed under the MIT License.
 ## 🏁 Ready to simplify your carrier management?
 
 Install and activate the module now to manage your carrier assignments in just a few clicks!
+
+## Makefile
+
+Depuis le dossier du module :
+
+```bash
+make build
+make package
+make clean
+```
+
+`make build` installe les dépendances Composer et prépare l’autoloader de
+production. `make package` génère ensuite l’archive installable dans `dist/`.

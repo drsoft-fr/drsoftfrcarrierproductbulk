@@ -58,7 +58,7 @@ class drsoftfrcarrierproductbulk extends Module
                 'visible' => true,
             ],
         ];
-        $this->version = '1.1.0';
+        $this->version = '1.1.1';
         $this->authorEmail = 'contact@drsoft.fr';
         $this->moduleGithubRepositoryUrl = 'https://github.com/drsoft-fr/drsoftfrcarrierproductbulk';
         $this->moduleGithubIssuesUrl = 'https://github.com/drsoft-fr/drsoftfrcarrierproductbulk/issues';
