@@ -128,10 +128,7 @@ final class CarrierProductBulkController extends FrameworkBundleAdminController
 
     /**
      * @AdminSecurity(
-     *     "is_granted('create', request.get('_legacy_controller'))
-     *      or is_granted('delete', request.get('_legacy_controller'))
-     *      or is_granted('update', request.get('_legacy_controller'))
-     *      or is_granted('read', request.get('_legacy_controller'))",
+     *     "is_granted('update', request.get('_legacy_controller'))",
      *     redirectRoute="admin_drsoft_fr_carrier_product_bulk_index",
      *     message="You do not have permission to edit this."
      * )
@@ -141,10 +138,7 @@ final class CarrierProductBulkController extends FrameworkBundleAdminController
      * @return JsonResponse
      */
     #[\PrestaShopBundle\Security\Attribute\AdminSecurity(
-        "is_granted('create', request.get('_legacy_controller'))
-         or is_granted('delete', request.get('_legacy_controller'))
-         or is_granted('update', request.get('_legacy_controller'))
-         or is_granted('read', request.get('_legacy_controller'))",
+        "is_granted('update', request.get('_legacy_controller'))",
         redirectRoute: 'admin_drsoft_fr_carrier_product_bulk_index',
         message: 'You do not have permission to edit this.'
     )]
