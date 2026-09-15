@@ -62,7 +62,9 @@ final class CarrierProductBulkController extends FrameworkBundleAdminController
 
     )
     {
-        parent::__construct();
+        if (version_compare(_PS_VERSION_, '9.0.0', '<')) {
+            parent::__construct();
+        }
 
         $this->module = $module;
         $this->addHandler = $addHandler;
