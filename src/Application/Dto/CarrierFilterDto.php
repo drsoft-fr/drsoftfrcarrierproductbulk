@@ -14,19 +14,23 @@ final class CarrierFilterDto
     public ?bool $deleted = null;
     public ?bool $active = null;
     public int $page = 1;
-    public int $limit = 20;
-    public int $offset = 0;
+    public ?int $limit = 20;
+    public ?int $offset = 0;
 
     public function __construct(array $data)
     {
         $this->idReference = $this->initializeIdValue($data, 'idReference');
         $this->name = $this->initializeStringValue($data, 'name');
         $this->isFree = $this->initializeBoolValue($data, 'isFree');
-        $this->deleted = $this->initializeBoolValue($data, 'deleted');
+        $this->deleted = array_key_exists('deleted', $data)
+            ? $this->initializeBoolValue($data, 'deleted')
+            : false;
         $this->active = $this->initializeBoolValue($data, 'active');
-        $this->page = $this->initializePageOrLimitValue($data, 'page', self::DEFAULT_PAGE);
-        $this->limit = $this->initializePageOrLimitValue($data, 'limit', self::DEFAULT_LIMIT);
-        $this->offset = $this->initializeOffsetValue() ?? 0;
+        $this->page = $this->initializePageOrLimitValue($data, 'page', self::DEFAULT_PAGE) ?? self::DEFAULT_PAGE;
+        $this->limit = array_key_exists('limit', $data) && $data['limit'] === null
+            ? null
+            : $this->initializePageOrLimitValue($data, 'limit', self::DEFAULT_LIMIT);
+        $this->offset = $this->limit !== null ? $this->initializeOffsetValue() ?? 0 : null;
     }
 
     public function toArray(): array

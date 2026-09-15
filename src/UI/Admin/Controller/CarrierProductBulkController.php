@@ -97,7 +97,9 @@ final class CarrierProductBulkController extends FrameworkBundleAdminController
     {
         $carrierFilterDto = new CarrierFilterDto([]);
         $productFilterDto = new ProductFilterDto([]);
+        $allCarriersFilterDto = new CarrierFilterDto(['deleted' => false, 'limit' => null]);
         $carriers = $this->getCarriersHandler->handle(new GetCarriersQuery($carrierFilterDto));
+        $allCarriers = $this->getCarriersHandler->handle(new GetCarriersQuery($allCarriersFilterDto));
         $products = $this->getProductsHandler->handle(new GetProductsQuery($productFilterDto));
         $categories = $this->getCategoriesHandler->handle(new GetCategoriesQuery(false));
         $manufacturers = $this->getManufacturersHandler->handle(new GetManufacturersQuery());
@@ -108,6 +110,7 @@ final class CarrierProductBulkController extends FrameworkBundleAdminController
             'help_link' => $this->generateSidebarLink($request->attributes->get('_legacy_controller')),
             'categories' => $categories,
             'carriers' => $carriers,
+            'all_carriers' => $allCarriers,
             'manufacturers' => $manufacturers,
             'products' => $products,
             'suppliers' => $suppliers,
@@ -210,7 +213,7 @@ final class CarrierProductBulkController extends FrameworkBundleAdminController
     {
         $total = $this->countCarriersHandler->handle(new CountCarriersQuery($filter));
 
-        return ceil($total / $filter->limit);
+        return !empty($filter->limit) ? ceil($total / $filter->limit) : 1.0;
     }
 
     private function getProductTotalPages(ProductFilterDto $filter): float

@@ -27,7 +27,7 @@ final class CarrierRepository
     {
         $qb = $this->getQueryBuilder($filter);
 
-        $qb->select('*');
+        $qb->select('c.*');
 
         if ($filter->limit !== null) {
             $qb->setMaxResults($filter->limit);
@@ -78,12 +78,14 @@ final class CarrierRepository
         }
 
         if ($filter->deleted !== null) {
-            $qb->andWhere('c.deleted = :deleted')->setParameter('deleted', $filter->deleted);
+            $qb->andWhere('c.deleted = :deleted')->setParameter('deleted', $filter->deleted ? 1 : 0);
         }
 
         if ($filter->active !== null) {
-            $qb->andWhere('c.active = :active')->setParameter('active', $filter->active);
+            $qb->andWhere('c.active = :active')->setParameter('active', $filter->active ? 1 : 0);
         }
+
+        $qb->orderBy('c.name', 'ASC');
 
         return $qb;
     }

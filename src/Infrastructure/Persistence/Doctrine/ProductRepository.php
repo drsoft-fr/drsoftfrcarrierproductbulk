@@ -192,7 +192,7 @@ final class ProductRepository
                 ->setParameter('active', $filter->active);
         }
 
-        if ($filter->carrierAssociation !== null) {
+        if ($filter->carrierAssociation !== null || !empty($filter->idCarrier)) {
             $prefix = $this->tablePrefix;
             $shopId = (int) $this->contextShopId;
             $inClause = '';

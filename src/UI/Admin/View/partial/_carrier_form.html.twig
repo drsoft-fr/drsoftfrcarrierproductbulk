@@ -3,10 +3,11 @@
       hx-target="#carriers-list"
       hx-swap="innerHTML"
       class="mb-3 p-3 border">
-    <h4>
+    <h4 class="mb-0">
         <a class="btn btn-link" data-toggle="collapse" href="#carrier-filters-collapse" role="button"
            aria-expanded="false" aria-controls="carrier-filters-collapse">
-            {{ 'Carrier filters'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}
+            {{ 'Carrier filters'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}&nbsp;
+            <span class="material-icons">arrow_drop_down</span>
         </a>
     </h4>
     <div id="carrier-filters-collapse" class="collapse">
@@ -45,9 +46,9 @@
                 <label for="carrier-filters__deleted"
                        class="form-control-label">{{ 'Deleted'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}</label>
                 <select id="carrier-filters__deleted" name="deleted" class="form-control mb-2">
-                    <option value="">--</option>
-                    <option value="1">{{ 'Yes'|trans({}, 'Admin.Global') }}</option>
-                    <option value="0">{{ 'No'|trans({}, 'Admin.Global') }}</option>
+                    <option value="0" {% if carrier_filter_data.deleted is same as(false) %}selected{% endif %}>{{ 'No'|trans({}, 'Admin.Global') }}</option>
+                    <option value="1" {% if carrier_filter_data.deleted is same as(true) %}selected{% endif %}>{{ 'Yes'|trans({}, 'Admin.Global') }}</option>
+                    <option value="" {% if carrier_filter_data.deleted is null %}selected{% endif %}>--</option>
                 </select>
             </div>
         </div>

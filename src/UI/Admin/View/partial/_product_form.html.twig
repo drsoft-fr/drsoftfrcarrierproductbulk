@@ -3,10 +3,11 @@
       hx-target="#products-list"
       hx-swap="innerHTML"
       class="mb-3 p-3 border">
-    <h4>
+    <h4 class="mb-0">
         <a class="btn btn-link" data-toggle="collapse" href="#product-filters-collapse" role="button"
            aria-expanded="false" aria-controls="product-filters-collapse">
-            {{ 'Product filters'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}
+            {{ 'Product filters'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}&nbsp;
+            <span class="material-icons">arrow_drop_down</span>
         </a>
     </h4>
     <div id="product-filters-collapse" class="collapse">
@@ -153,14 +154,10 @@
                 <select id="product-filters__id-carrier" name="idCarrier[]" class="form-control"
                         multiple aria-multiselectable="true">
                     <option value="">{{ 'No carrier selected'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}</option>
-                    {% set seen_carrier_refs = [] %}
-                    {% for carrier in carriers %}
-                        {% if carrier.id_reference not in seen_carrier_refs %}
-                            {% set seen_carrier_refs = seen_carrier_refs|merge([carrier.id_reference]) %}
-                            <option value="{{ carrier.id_reference }}">
-                                #{{ carrier.id_reference }} - {{ carrier.name }}
-                            </option>
-                        {% endif %}
+                    {% for carrier in all_carriers|default(carriers) %}
+                        <option value="{{ carrier.id_reference }}">
+                            #{{ carrier.id_reference }} - {{ carrier.name }}
+                        </option>
                     {% endfor %}
                 </select>
             </div>
