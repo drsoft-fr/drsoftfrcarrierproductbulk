@@ -13,10 +13,40 @@
                 <div class="alert" :class="type ? 'alert-' + type : 'alert-success'" x-text="message" x-show="message"
                      x-transition></div>
             </template>
-            <div class="mb-4 p-2 bg-light border">
-                {{ '[1]Carriers:[/1] [2][/2] selected'|trans({'[1]': '<strong>', '[/1]': '</strong>', '[2]': '<span x-text="selectedCarriers.length">', '[/2]': '</span>'}, 'Modules.Drsoftfrcarrierproductbulk.Admin')|raw }}
-                &nbsp;|&nbsp;
-                {{ '[1]Products:[/1] [2][/2] selected'|trans({'[1]': '<strong>', '[/1]': '</strong>', '[2]': '<span x-text="selectedProducts.length">', '[/2]': '</span>'}, 'Modules.Drsoftfrcarrierproductbulk.Admin')|raw }}
+            <div class="mb-4 p-3 bg-light border d-flex flex-wrap align-items-center justify-content-between">
+                <div class="d-flex align-items-center flex-wrap">
+                    <div class="mr-3 my-1">
+                        {{ '[1]Carriers:[/1] [2][/2] selected'|trans({
+                            '[1]': '<strong>',
+                            '[/1]': '</strong>',
+                            '[2]': '<span class="badge badge-primary" x-text="selectedCarriers.length">',
+                            '[/2]': '</span>'
+                        }, 'Modules.Drsoftfrcarrierproductbulk.Admin')|raw }}
+                        <button type="button" class="btn btn-sm btn-outline-secondary ml-2"
+                                x-show="selectedCarriers.length > 0" @click="clearSelection('carriers')">
+                            {{ 'Clear'|trans({}, 'Admin.Actions') }}
+                        </button>
+                    </div>
+                    <div class="mr-3 my-1">
+                        {{ '[1]Products:[/1] [2][/2] selected'|trans({
+                            '[1]': '<strong>',
+                            '[/1]': '</strong>',
+                            '[2]': '<span class="badge badge-primary" x-text="selectedProducts.length">',
+                            '[/2]': '</span>'
+                        }, 'Modules.Drsoftfrcarrierproductbulk.Admin')|raw }}
+                        <button type="button" class="btn btn-sm btn-outline-secondary ml-2"
+                                x-show="selectedProducts.length > 0" @click="clearSelection('products')">
+                            {{ 'Clear'|trans({}, 'Admin.Actions') }}
+                        </button>
+                    </div>
+                </div>
+                <div class="my-1">
+                    <button type="button" class="btn btn-sm btn-outline-danger"
+                            x-show="selectedCarriers.length > 0 || selectedProducts.length > 0"
+                            @click="clearSelection('all')">
+                        {{ 'Clear all selections'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}
+                    </button>
+                </div>
             </div>
             {% include '@Modules/drsoftfrcarrierproductbulk/src/UI/Admin/View/partial/_carrier_form.html.twig' %}
             <div id="carriers-list">
@@ -30,13 +60,21 @@
             <div class="card-actions">
                 <div class="mt-4 row">
                     <div class="col-12 col-md-6">
-                        <button @click="submitAction('add')" class="btn btn-success w-100">
-                            {{ '✅ Add carriers to products'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Actions') }}
+                        <button @click="submitAction('add')" class="btn btn-success w-100"
+                                :disabled="selectedCarriers.length === 0 || selectedProducts.length === 0">
+                            {{ '✅ Add %c% carrier(s) to %p% product(s)'|trans({
+                                '%c%': '<span class="badge badge-light text-dark font-weight-bold" x-text="selectedCarriers.length"></span>',
+                                '%p%': '<span class="badge badge-light text-dark font-weight-bold" x-text="selectedProducts.length"></span>'
+                            }, 'Modules.Drsoftfrcarrierproductbulk.Actions')|raw }}
                         </button>
                     </div>
                     <div class="col-12 col-md-6 mt-3 mt-md-0">
-                        <button @click="submitAction('remove')" class="btn btn-danger w-100">
-                            {{ '❌ Remove carriers from products'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Actions') }}
+                        <button @click="submitAction('remove')" class="btn btn-danger w-100"
+                                :disabled="selectedCarriers.length === 0 || selectedProducts.length === 0">
+                            {{ '❌ Remove %c% carrier(s) from %p% product(s)'|trans({
+                                '%c%': '<span class="badge badge-light text-dark font-weight-bold" x-text="selectedCarriers.length"></span>',
+                                '%p%': '<span class="badge badge-light text-dark font-weight-bold" x-text="selectedProducts.length"></span>'
+                            }, 'Modules.Drsoftfrcarrierproductbulk.Actions')|raw }}
                         </button>
                     </div>
                 </div>
@@ -109,6 +147,17 @@
             })
           },
 
+          clearSelection(type) {
+            if (type === 'carriers' || type === 'all') {
+              this.selectedCarriers = []
+              this.syncSelections('carriers')
+            }
+            if (type === 'products' || type === 'all') {
+              this.selectedProducts = []
+              this.syncSelections('products')
+            }
+          },
+
           toggleItem(type, event) {
             const id = parseInt(event.target.value)
             let array = type === 'carriers' ? this.selectedCarriers : this.selectedProducts
@@ -152,6 +201,20 @@
               this.loading = false
               return
             }
+
+            const confirmMsg = action === 'add'
+              ? '{{ 'Are you sure you want to add %carriers% carrier(s) to %products% product(s)?'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}'
+              : '{{ 'Are you sure you want to remove %carriers% carrier(s) from %products% product(s)?'|trans({}, 'Modules.Drsoftfrcarrierproductbulk.Admin') }}'
+
+            const parsedMsg = confirmMsg
+              .replace('%carriers%', this.selectedCarriers.length)
+              .replace('%products%', this.selectedProducts.length)
+
+            if (!window.confirm(parsedMsg)) {
+              this.loading = false
+              return
+            }
+
             fetch('{{ path('admin_drsoft_fr_carrier_product_bulk_ajax') }}', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
