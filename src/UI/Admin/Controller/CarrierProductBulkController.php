@@ -27,7 +27,6 @@ use DrSoftFr\Module\CarrierProductBulk\Application\QueryHandler\GetSuppliersHand
 use drsoftfrcarrierproductbulk;
 use PrestaShopBundle\Controller\Admin\FrameworkBundleAdminController;
 use PrestaShopBundle\Security\Annotation\AdminSecurity;
-use PrestaShopBundle\Security\Annotation\ModuleActivated;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
