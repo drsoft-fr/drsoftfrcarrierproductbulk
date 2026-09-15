@@ -5,7 +5,7 @@ declare(strict_types=1);
 use DrSoftFr\Module\CarrierProductBulk\UI\Admin\Controller\CarrierProductBulkController;
 use PrestaShop\PrestaShop\Core\Cache\Clearer\CacheClearerChain;
 
-if (!defined('_PS_VERSION_') || !defined('_CAN_LOAD_FILES_')) {
+if (!defined('_PS_VERSION_')) {
     exit;
 }
 
